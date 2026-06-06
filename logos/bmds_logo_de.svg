@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 90" width="320" height="90">
+  <!-- Bundesadler (Platzhalter – bitte durch offizielle SVG ersetzen) -->
+  <g transform="translate(0,0)">
+    <!-- Eagle body (simplified heraldic style) -->
+    <path d="
+      M45,8
+      C42,6 36,6 32,9 C28,12 29,17 33,16
+      C28,19 23,24 20,30 C17,36 16,43 20,47
+      C16,44 11,44 10,48 C9,52 13,56 18,54
+      C22,60 28,63 32,61 C30,65 30,70 33,73
+      C36,76 40,76 42,73 C44,70 44,66 43,62
+      C45,63 47,64 45,67 C46,71 50,72 50,72
+      C50,72 54,71 55,67 C53,64 55,63 57,62
+      C56,66 56,70 58,73 C60,76 64,76 67,73
+      C70,70 70,65 68,61 C72,63 78,60 82,54
+      C87,56 91,52 90,48 C89,44 84,44 80,47
+      C84,43 83,36 80,30 C77,24 72,19 67,16
+      C71,17 72,12 68,9 C64,6 58,6 55,8
+      C52,6 48,6 45,8 Z
+      M50,8 C50,8 50,14 50,17
+      M45,28 C43,32 44,37 47,39 C50,41 53,39 54,35
+      M50,39 L50,55
+      M42,55 L58,55
+    " fill="#1a1a1a" stroke="none"/>
+    <!-- Head -->
+    <ellipse cx="50" cy="11" rx="9" ry="8" fill="#1a1a1a"/>
+    <!-- Beak -->
+    <path d="M59,10 L65,13 L59,14 Z" fill="#D4A017"/>
+    <!-- Eye -->
+    <circle cx="56" cy="9" r="2" fill="white"/>
+    <circle cx="57" cy="9" r="1" fill="#1a1a1a"/>
+    <!-- Chest shield -->
+    <rect x="44" y="38" width="12" height="15" rx="2" fill="black"/>
+    <rect x="44" y="38" width="12" height="5" fill="black"/>
+    <rect x="44" y="43" width="12" height="5" fill="#D42020"/>
+    <rect x="44" y="48" width="12" height="5" fill="#D4A017"/>
+    <!-- Talons -->
+    <path d="M40,63 C37,65 33,66 30,64 C28,68 31,72 35,70 C32,73 33,77 37,76 C34,79 36,83 40,82 C38,85 41,88 45,87" stroke="#D4A017" stroke-width="2" fill="none"/>
+    <path d="M60,63 C63,65 67,66 70,64 C72,68 69,72 65,70 C68,73 67,77 63,76 C66,79 64,83 60,82 C62,85 59,88 55,87" stroke="#D4A017" stroke-width="2" fill="none"/>
+  </g>
+  <!-- Trennlinie -->
+  <line x1="105" y1="5" x2="105" y2="85" stroke="#cccccc" stroke-width="1"/>
+  <!-- Textbereich -->
+  <g transform="translate(115, 0)">
+    <text x="0" y="22" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="normal" fill="#555555" letter-spacing="0.3">Bundesrepublik Deutschland</text>
+    <line x1="0" y1="28" x2="195" y2="28" stroke="#cccccc" stroke-width="0.5"/>
+    <text x="0" y="46" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="bold" fill="#000000" letter-spacing="0.2">Bundesministerium</text>
+    <text x="0" y="63" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="bold" fill="#000000" letter-spacing="0.1">für Digitales und</text>
+    <text x="0" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="bold" fill="#000000" letter-spacing="0.1">Staatsmodernisierung</text>
+  </g>
+  <!-- Hinweis: PLATZHALTER -->
+  <!-- Dieses Logo ist ein Platzhalter. Bitte ersetzen Sie diese Datei durch die offizielle SVG-Datei des BMDS. -->
+</svg>
