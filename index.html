@@ -83,8 +83,9 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 }
 
 /* === CARD FRONT ===
-   No padding on .front – logo goes flush into the corner.
-   Card-body carries its own padding so text is inset like the reference.
+   Logo flush top-left (SVG has its own internal whitespace).
+   Text starts at 20.91mm from card left = right edge of flag stripe.
+   In preview (8px/mm): 167px. Bottom: 24px = last text at ~50mm from top.
 */
 .front{
   width:100%;height:100%;
@@ -94,7 +95,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 }
 .front .card-body{
   margin-top:auto;
-  padding:0 40px 32px 40px;   /* 5mm left/right, 4mm bottom */
+  padding:0 40px 24px 167px;
   display:flex;
   flex-direction:column;
 }
@@ -143,7 +144,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 }
 .back .card-body{
   margin-top:auto;
-  padding:0 24px 32px 40px;   /* smaller right padding – QR code sits near edge */
+  padding:0 24px 24px 167px;  /* same left as front: 167px = 20.91mm */
   display:flex;
   align-items:flex-end;
   gap:16px;
@@ -175,8 +176,8 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   .bcard{width:85mm;height:55mm;box-shadow:none}
   .front,.back{padding:0}
   .card-logo{height:23mm;width:auto}
-  .front .card-body{padding:0 5mm 4mm 5mm}
-  .back .card-body{padding:0 3mm 4mm 5mm}
+  .front .card-body{padding:0 5mm 3mm 21mm}
+  .back .card-body{padding:0 3mm 3mm 21mm}
   .card-name{font-size:14pt;margin-bottom:0.75mm}
   .card-title{font-size:5.5pt}
   .card-dept{font-size:5.5pt;margin-bottom:1.4mm}
