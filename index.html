@@ -5,31 +5,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Visitenkarten-Generator – BMDS</title>
 <style>
+@font-face {
+  font-family: 'BundesSans';
+  src: url('fonts/BundesSansWebRegular.ttf') format('truetype');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'BundesSans';
+  src: url('fonts/BundesSansWebBold.ttf') format('truetype');
+  font-weight: 700; font-style: normal;
+}
+@font-face {
+  font-family: 'BundesSerif';
+  src: url('fonts/BundesSerifWebRegular.ttf') format('truetype');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'BundesSerif';
+  src: url('fonts/BundesSerifWebBold.ttf') format('truetype');
+  font-weight: 700; font-style: normal;
+}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:#ECEEF1;color:#1a1a1a;font-size:14px}
+body{font-family:'BundesSans',Arial,sans-serif;background:#ECEEF1;color:#1a1a1a;font-size:14px}
 
 /* HEADER */
-.site-header{background:#1a1a1a;color:#fff;padding:13px 24px;display:flex;align-items:center;border-bottom:3px solid #C5A028}
-.site-header .h-title{font-size:15px;font-weight:700;letter-spacing:0.01em}
-.site-header .h-sub{font-size:11.5px;opacity:.6;margin-top:2px}
-
-/* NOTICE */
-.notice{background:#FFFBEA;border-left:4px solid #C5A028;padding:9px 22px;font-size:12px;color:#666;line-height:1.55}
-.notice code{background:#f0ede0;padding:1px 5px;border-radius:3px;font-size:11px;font-family:monospace}
+.site-header{background:#1a1a1a;color:#fff;padding:13px 24px;display:flex;align-items:center}
+.h-title{font-size:15px;font-weight:700;letter-spacing:.01em;font-family:'BundesSans',Arial,sans-serif}
+.h-sub{font-size:11.5px;opacity:.6;margin-top:2px;font-family:'BundesSans',Arial,sans-serif}
 
 /* LAYOUT */
-.layout{display:grid;grid-template-columns:345px 1fr;min-height:calc(100vh - 72px)}
+.layout{display:grid;grid-template-columns:350px 1fr;min-height:calc(100vh - 52px)}
 
 /* SIDEBAR */
-.sidebar{background:#fff;border-right:1px solid #e0e0e0;padding:18px 16px 24px;overflow-y:auto;height:calc(100vh - 72px);position:sticky;top:0}
-.sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#bbb;margin:18px 0 9px;padding-bottom:5px;border-bottom:1px solid #f0f0f0}
+.sidebar{background:#fff;border-right:1px solid #e0e0e0;padding:18px 16px 24px;overflow-y:auto;height:calc(100vh - 52px);position:sticky;top:0}
+.sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#bbb;margin:18px 0 9px;padding-bottom:5px;border-bottom:1px solid #f0f0f0;font-family:'BundesSans',Arial,sans-serif}
 .sec:first-child{margin-top:0}
 .fg{margin-bottom:10px}
-label{display:block;font-size:11.5px;font-weight:600;color:#555;margin-bottom:3px}
-input[type=text],input[type=email],select{width:100%;padding:7px 9px;border:1.5px solid #ddd;border-radius:5px;font-size:13px;font-family:inherit;color:#222;background:#fff;transition:border-color .15s;-webkit-appearance:none}
+label{display:block;font-size:11.5px;font-weight:700;color:#555;margin-bottom:3px;font-family:'BundesSans',Arial,sans-serif}
+input[type=text],input[type=email],select{width:100%;padding:7px 9px;border:1.5px solid #ddd;border-radius:4px;font-size:13px;font-family:'BundesSans',Arial,sans-serif;color:#222;background:#fff;transition:border-color .15s;-webkit-appearance:none}
 input:focus,select:focus{outline:none;border-color:#1a1a1a}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.btn{width:100%;padding:11px;border-radius:5px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:8px;letter-spacing:.01em;border:none;transition:background .15s}
+.btn{width:100%;padding:11px;border-radius:4px;font-size:13px;font-weight:700;font-family:'BundesSans',Arial,sans-serif;cursor:pointer;margin-top:8px;border:none;transition:background .15s}
 .btn-primary{background:#1a1a1a;color:#fff}
 .btn-primary:hover{background:#333}
 .btn-secondary{background:#fff;color:#1a1a1a;border:2px solid #1a1a1a !important;margin-top:8px}
@@ -37,88 +54,162 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 
 /* PREVIEW */
 .preview{padding:28px 32px;overflow-y:auto}
-.plabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#aaa;margin-bottom:9px}
-.card-wrap{margin-bottom:32px}
+.plabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#aaa;margin-bottom:9px;font-family:'BundesSans',Arial,sans-serif}
+.card-wrap{margin-bottom:36px}
 
-/* === BUSINESS CARD === */
-/* 85mm × 55mm, preview ~7.5× scale → 640 × 414px */
+/* ===== BUSINESS CARD =====
+   Real size: 85mm × 55mm
+   Preview scale: 680px / 85mm = 8px/mm
+   Preview: 680 × 440px
+*/
 .bcard{
-  width:640px;height:414px;
+  width:680px; height:440px;
   background:#fff;
-  border:1px solid #ccc;
-  border-radius:9px;
-  box-shadow:0 6px 24px rgba(0,0,0,.10),0 1px 3px rgba(0,0,0,.06);
+  box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);
   overflow:hidden;
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:'BundesSans',Arial,sans-serif;
   position:relative;
 }
 
-/* Gold top accent stripe */
-.bcard::before{
-  content:'';display:block;
-  position:absolute;top:0;left:0;right:0;
-  height:4px;
-  background:linear-gradient(90deg,#C5A028 0%,#E8C84A 50%,#C5A028 100%);
+/* === LOGO BLOCK ===
+   Eagle: 88×232px extracted → display 59×156px
+   Stripe: 6px wide × 152px tall (colors: 51/51/50px)
+   Text: BundesSans Bold
+*/
+.logo-block{
+  display:flex;
+  align-items:flex-start;
+  gap:0;
+}
+.logo-eagle{
+  width:59px;
+  height:156px;
+  flex-shrink:0;
+  object-fit:contain;
+  object-position:left top;
+  display:block;
+}
+.logo-stripe{
+  width:6px;
+  height:152px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  margin:0 10px 0 3px;
+}
+.logo-stripe .s-k{flex:0 0 51px;background:#000}
+.logo-stripe .s-r{flex:0 0 51px;background:#DD0000}
+.logo-stripe .s-g{flex:0 0 50px;background:#FFCC00}
+.logo-text{
+  padding-top:2px;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+.logo-text .lt-ministry{
+  font-family:'BundesSans',Arial,sans-serif;
+  font-weight:700;
+  font-size:16.5px;
+  color:#000;
+  line-height:1.28;
+  letter-spacing:-.01em;
 }
 
-/* FRONT */
-.front{width:100%;height:100%;padding:22px 36px 22px;display:flex;flex-direction:column}
-.front .logo-row{height:56px;display:flex;align-items:center;margin-top:6px}
-.front .logo-row img{max-height:56px;width:auto;max-width:360px}
-.rule{height:1.5px;background:#1a1a1a;margin:13px 0 15px;flex-shrink:0}
-.front .f-name{font-size:22px;font-weight:700;color:#000;letter-spacing:-.01em;line-height:1.15}
-.front .f-jtitle{font-size:12.5px;color:#333;margin-top:5px;line-height:1.3}
-.front .f-dept{font-size:11px;color:#888;margin-top:3px}
-.front .contacts{margin-top:auto;display:flex;flex-direction:column;gap:0}
-.crow{display:flex;align-items:center;gap:9px;font-size:11px;color:#222;line-height:1.75}
-.crow .lbl{font-size:8.5px;font-weight:700;letter-spacing:.08em;color:#aaa;min-width:10px;text-align:right}
-.front .ffoot{margin-top:9px;padding-top:7px;border-top:1px solid #eee;font-size:9px;color:#bbb;line-height:1.65}
+/* === CARD FRONT === */
+.front{
+  width:100%;height:100%;
+  padding:34px 40px 28px;
+  display:flex;
+  flex-direction:column;
+}
+.front .card-body{
+  margin-top:auto;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+.card-name{
+  font-family:'BundesSerif',Georgia,serif;
+  font-weight:700;
+  font-size:30px;
+  color:#000;
+  letter-spacing:-.01em;
+  line-height:1.1;
+  margin-bottom:6px;
+}
+.card-title{
+  font-family:'BundesSans',Arial,sans-serif;
+  font-weight:400;
+  font-size:13px;
+  color:#000;
+  line-height:1.4;
+}
+.card-dept{
+  font-family:'BundesSans',Arial,sans-serif;
+  font-weight:400;
+  font-size:13px;
+  color:#000;
+  line-height:1.4;
+  margin-bottom:10px;
+}
+.card-contact{
+  font-family:'BundesSans',Arial,sans-serif;
+  font-weight:400;
+  font-size:14px;
+  color:#000;
+  line-height:1.5;
+}
 
-/* BACK */
-.back{width:100%;height:100%;padding:22px 36px 22px;display:flex;flex-direction:column}
-.back .logo-row{height:56px;display:flex;align-items:center;margin-top:6px}
-.back .logo-row img{max-height:56px;width:auto;max-width:320px}
-.back .body{flex:1;display:flex;gap:18px;overflow:hidden;min-height:0}
-.back .info{flex:1;display:flex;flex-direction:column;min-width:0}
-.back .b-name{font-size:22px;font-weight:700;color:#000;letter-spacing:-.01em;line-height:1.15}
-.back .b-jtitle{font-size:12.5px;color:#333;margin-top:5px}
-.back .b-dept{font-size:11px;color:#888;margin-top:3px}
-.back .contacts{margin-top:auto;display:flex;flex-direction:column;gap:0}
-.back .bfoot{margin-top:9px;padding-top:7px;border-top:1px solid #eee;font-size:9px;color:#bbb;line-height:1.65}
-.qr-col{width:155px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-#qr-code canvas,#qr-code img{width:145px !important;height:145px !important;display:block}
+/* === CARD BACK === */
+.back{
+  width:100%;height:100%;
+  padding:34px 40px 28px;
+  display:flex;
+  flex-direction:column;
+}
+.back .card-body{
+  margin-top:auto;
+  display:flex;
+  align-items:flex-end;
+  gap:24px;
+}
+.back .info-col{flex:1;min-width:0}
+.back .qr-col{
+  flex-shrink:0;
+  width:165px;
+  display:flex;
+  justify-content:flex-end;
+  align-items:flex-end;
+}
+#qr-code canvas,#qr-code img{
+  width:160px !important;
+  height:160px !important;
+  display:block;
+}
 
 /* ===== PRINT ===== */
 @media print{
   @page{size:85mm 55mm;margin:0}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{background:#fff}
-  .site-header,.notice,.sidebar,.plabel{display:none !important}
+  .site-header,.sidebar,.plabel{display:none !important}
   .layout{display:block}
   .preview{padding:0}
   .card-wrap{page-break-after:always;margin:0}
   .card-wrap:last-child{page-break-after:auto}
-
-  .bcard{
-    width:85mm;height:55mm;
-    border:none;border-radius:0;box-shadow:none;
-  }
-  .bcard::before{height:1.2mm}
-
-  .front,.back{padding:5mm 5.5mm 4mm}
-  .front .logo-row,.back .logo-row{height:14mm;margin-top:1mm}
-  .front .logo-row img,.back .logo-row img{max-height:14mm;max-width:52mm}
-  .rule{margin:1.8mm 0 2.2mm}
-
-  .front .f-name,.back .b-name{font-size:8pt}
-  .front .f-jtitle,.back .b-jtitle{font-size:6pt;margin-top:.8mm}
-  .front .f-dept,.back .b-dept{font-size:5.5pt;margin-top:.4mm}
-  .crow{font-size:5.5pt;line-height:1.6;gap:5px}
-  .crow .lbl{font-size:4.5pt}
-  .front .ffoot,.back .bfoot{font-size:4.5pt;margin-top:1.5mm;padding-top:1mm}
-
-  .back .body{gap:3mm}
-  .qr-col{width:20mm}
+  .bcard{width:85mm;height:55mm;box-shadow:none}
+  .front,.back{padding:4.2mm 5mm 3.5mm}
+  .logo-eagle{width:7.4mm;height:19.5mm}
+  .logo-stripe{width:0.75mm;height:19mm;margin:0 1.2mm 0 0.4mm}
+  .logo-stripe .s-k{flex:0 0 6.3mm}
+  .logo-stripe .s-r{flex:0 0 6.3mm}
+  .logo-stripe .s-g{flex:0 0 6.3mm}
+  .logo-text .lt-ministry{font-size:7.5pt}
+  .card-name{font-size:14pt;margin-bottom:1mm}
+  .card-title,.card-dept{font-size:6pt}
+  .card-dept{margin-bottom:2mm}
+  .card-contact{font-size:6.5pt;line-height:1.45}
+  .back .qr-col{width:20mm}
   #qr-code canvas,#qr-code img{width:20mm !important;height:20mm !important}
 }
 </style>
@@ -132,92 +223,46 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   </div>
 </header>
 
-<div class="notice">
-  ⚠ <strong>Logo-Platzhalter:</strong> Legen Sie die offiziellen SVG-Logos unter
-  <code>logos/bmds_logo_de.svg</code> (Vorderseite) und <code>logos/bmds_logo_en.svg</code> (Rückseite) ab.
-  Die aktuell angezeigten Logos sind Näherungsgrafiken für Entwurfszwecke.
-</div>
-
 <div class="layout">
 
 <!-- ===== FORMULAR ===== -->
 <aside class="sidebar">
-
   <div class="sec">Persönliche Daten</div>
   <div class="row2">
     <div class="fg">
       <label>Anrede</label>
-      <select id="f-sal">
-        <option value="">–</option>
-        <option>Herr</option><option>Frau</option><option>Mx.</option>
-      </select>
+      <select id="f-sal"><option value="">–</option><option>Herr</option><option>Frau</option><option>Mx.</option></select>
     </div>
     <div class="fg">
       <label>Akad. Titel</label>
-      <select id="f-acad">
-        <option value="">–</option>
-        <option>Dr.</option><option>Prof.</option><option>Prof. Dr.</option><option>Dr. rer. nat.</option><option>Dr. jur.</option>
-      </select>
+      <select id="f-acad"><option value="">–</option><option>Dr.</option><option>Prof.</option><option>Prof. Dr.</option><option>Dr. rer. nat.</option><option>Dr. jur.</option></select>
     </div>
   </div>
   <div class="row2">
-    <div class="fg">
-      <label>Vorname</label>
-      <input type="text" id="f-fn" value="Max" placeholder="Vorname">
-    </div>
-    <div class="fg">
-      <label>Nachname</label>
-      <input type="text" id="f-ln" value="Mustermann" placeholder="Nachname">
-    </div>
+    <div class="fg"><label>Vorname</label><input type="text" id="f-fn" value="Ralf" placeholder="Vorname"></div>
+    <div class="fg"><label>Nachname</label><input type="text" id="f-ln" value="Käck" placeholder="Nachname"></div>
   </div>
 
   <div class="sec">Position – Deutsch</div>
-  <div class="fg">
-    <label>Berufsbezeichnung / Funktion</label>
-    <input type="text" id="f-jt-de" value="Referatsleiter" placeholder="z. B. Referatsleiter, Vertreter">
-  </div>
-  <div class="fg">
-    <label>Abteilung / Referat</label>
-    <input type="text" id="f-dept-de" value="Referat DG 3" placeholder="z. B. Referat DG 3">
-  </div>
+  <div class="fg"><label>Berufsbezeichnung / Funktion</label><input type="text" id="f-jt-de" value="Referent Standardisierung" placeholder="z. B. Referent, Referatsleiter"></div>
+  <div class="fg"><label>Abteilung / Referat (Zeile 1)</label><input type="text" id="f-dept-de1" value="DS I 1: IT-Architektur, Portfoliomanagement," placeholder="Abteilungszeile 1"></div>
+  <div class="fg"><label>Abteilung / Referat (Zeile 2)</label><input type="text" id="f-dept-de2" value="Digitale Souveränität" placeholder="Abteilungszeile 2 (optional)"></div>
 
   <div class="sec">Position – English</div>
-  <div class="fg">
-    <label>Job Title / Function</label>
-    <input type="text" id="f-jt-en" value="Head of Division" placeholder="e.g. Head of Division">
-  </div>
-  <div class="fg">
-    <label>Department / Division</label>
-    <input type="text" id="f-dept-en" value="Division DG 3" placeholder="e.g. Division DG 3">
-  </div>
+  <div class="fg"><label>Job Title / Function</label><input type="text" id="f-jt-en" value="Expert Standardization" placeholder="e.g. Expert, Head of Division"></div>
+  <div class="fg"><label>Department / Division (Line 1)</label><input type="text" id="f-dept-en1" value="DS I 1: IT Architecture, Portfolio Mgmt," placeholder="Department line 1"></div>
+  <div class="fg"><label>Department / Division (Line 2)</label><input type="text" id="f-dept-en2" value="Digital Sovereignty" placeholder="Department line 2 (optional)"></div>
 
   <div class="sec">Kontaktdaten</div>
-  <div class="fg">
-    <label>Telefon</label>
-    <input type="text" id="f-tel" value="+49 30 12345-678" placeholder="+49 30 …">
-  </div>
-  <div class="fg">
-    <label>Mobil / Handy</label>
-    <input type="text" id="f-mob" value="" placeholder="+49 170 … (optional)">
-  </div>
-  <div class="fg">
-    <label>E-Mail</label>
-    <input type="email" id="f-mail" value="max.mustermann@bmds.bund.de" placeholder="name@bmds.bund.de">
-  </div>
+  <div class="fg"><label>Telefon</label><input type="text" id="f-tel" value="+49 30 18681 17000" placeholder="+49 30 …"></div>
+  <div class="fg"><label>Mobil / Handy (optional)</label><input type="text" id="f-mob" value="+49 000 1234567" placeholder="+49 170 …"></div>
+  <div class="fg"><label>E-Mail</label><input type="email" id="f-mail" value="ralf.kaeck@bmds.bund.de" placeholder="name@bmds.bund.de"></div>
 
   <div class="sec">Ministerium</div>
-  <div class="fg">
-    <label>Adresse</label>
-    <input type="text" id="f-addr" value="Englische Straße 30, 10587 Berlin">
-  </div>
-  <div class="fg">
-    <label>Website</label>
-    <input type="text" id="f-web" value="www.bmds.bund.de">
-  </div>
+  <div class="fg"><label>Adresse</label><input type="text" id="f-addr" value="Alt-Moabit 140, 10557 Berlin"></div>
 
   <button class="btn btn-primary" onclick="generate()">▶ Visitenkarte generieren</button>
   <button class="btn btn-secondary" onclick="window.print()">🖨 Als PDF drucken / speichern</button>
-
 </aside>
 
 <!-- ===== VORSCHAU ===== -->
@@ -228,22 +273,25 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Vorderseite – Deutsch</div>
     <div class="bcard">
       <div class="front">
-        <div class="logo-row">
-          <img src="logos/bmds_logo_de.svg" alt="BMDS Logo DE"
-               onerror="this.style.display='none';this.parentElement.innerHTML+='<span style=&quot;font-size:11px;color:#bbb&quot;>Logo nicht gefunden – bitte SVG hinterlegen</span>'">
+        <div class="logo-block">
+          <img class="logo-eagle" src="logos/eagle.png" alt="Bundesadler">
+          <div class="logo-stripe"><div class="s-k"></div><div class="s-r"></div><div class="s-g"></div></div>
+          <div class="logo-text">
+            <span class="lt-ministry">Bundesministerium</span>
+            <span class="lt-ministry">für Digitales und</span>
+            <span class="lt-ministry">Staatsmodernisierung</span>
+          </div>
         </div>
-        <div class="rule"></div>
-        <div class="f-name" id="d-name">Max Mustermann</div>
-        <div class="f-jtitle" id="d-jt">Referatsleiter</div>
-        <div class="f-dept" id="d-dept">Referat DG 3</div>
-        <div class="contacts">
-          <div class="crow" id="d-tel-r"><span class="lbl">T</span><span id="d-tel"></span></div>
-          <div class="crow" id="d-mob-r"><span class="lbl">M</span><span id="d-mob"></span></div>
-          <div class="crow" id="d-mail-r"><span class="lbl">E</span><span id="d-mail"></span></div>
-        </div>
-        <div class="ffoot">
-          Bundesministerium für Digitales und Staatsmodernisierung &nbsp;·&nbsp;
-          <span id="d-addr"></span> &nbsp;·&nbsp; <span id="d-web"></span>
+        <div class="card-body">
+          <div class="card-name" id="d-name">Ralf Käck</div>
+          <div class="card-title" id="d-jt">Referent Standardisierung</div>
+          <div class="card-dept" id="d-dept">DS I 1: IT-Architektur, Portfoliomanagement,<br>Digitale Souveränität</div>
+          <div class="card-contact">
+            <div id="d-addr">Alt-Moabit 140, 10557 Berlin</div>
+            <div id="d-tel-row">Tel.: <span id="d-tel"></span></div>
+            <div id="d-mob-row">Mobil: <span id="d-mob"></span></div>
+            <div id="d-mail"><span id="d-mail-val"></span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -254,25 +302,19 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Rückseite – English</div>
     <div class="bcard">
       <div class="back">
-        <div class="logo-row">
-          <img src="logos/bmds_logo_en.svg" alt="BMDS Logo EN"
-               onerror="this.style.display='none';this.parentElement.innerHTML+='<span style=&quot;font-size:11px;color:#bbb&quot;>Logo not found – please provide SVG</span>'">
+        <div class="logo-block">
+          <img class="logo-eagle" src="logos/eagle.png" alt="Federal Eagle">
+          <div class="logo-stripe"><div class="s-k"></div><div class="s-r"></div><div class="s-g"></div></div>
+          <div class="logo-text">
+            <span class="lt-ministry">Federal Ministry for Digital</span>
+            <span class="lt-ministry">and State Modernization</span>
+          </div>
         </div>
-        <div class="rule"></div>
-        <div class="body">
-          <div class="info">
-            <div class="b-name" id="e-name">Max Mustermann</div>
-            <div class="b-jtitle" id="e-jt">Head of Division</div>
-            <div class="b-dept" id="e-dept">Division DG 3</div>
-            <div class="contacts">
-              <div class="crow" id="e-tel-r"><span class="lbl">T</span><span id="e-tel"></span></div>
-              <div class="crow" id="e-mob-r"><span class="lbl">M</span><span id="e-mob"></span></div>
-              <div class="crow" id="e-mail-r"><span class="lbl">E</span><span id="e-mail"></span></div>
-            </div>
-            <div class="bfoot">
-              Federal Ministry for Digital and State Modernization &nbsp;·&nbsp;
-              <span id="e-addr"></span> &nbsp;·&nbsp; <span id="e-web"></span>
-            </div>
+        <div class="card-body">
+          <div class="info-col">
+            <div class="card-name" id="e-name">Ralf Käck</div>
+            <div class="card-title" id="e-jt">Expert Standardization</div>
+            <div class="card-dept" id="e-dept">DS I 1: IT Architecture, Portfolio Mgmt,<br>Digital Sovereignty</div>
           </div>
           <div class="qr-col">
             <div id="qr-code"></div>
@@ -283,105 +325,81 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   </div>
 
 </main>
-</div><!-- end .layout -->
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
 'use strict';
-
-function v(id){ return document.getElementById(id).value.trim(); }
+function v(id){return document.getElementById(id).value.trim();}
 
 function fullName(){
   return [v('f-acad'), v('f-fn'), v('f-ln')].filter(Boolean).join(' ');
 }
 
 function buildVCard(){
-  const fn  = fullName();
-  const ln  = v('f-ln'), fn2 = v('f-fn'), pfx = v('f-acad');
-  const jt  = v('f-jt-de');
-  const tel = v('f-tel'), mob = v('f-mob'), mail = v('f-mail');
-  const addr= v('f-addr'), web = v('f-web');
-
-  const lines = [
-    'BEGIN:VCARD', 'VERSION:3.0',
-    `N:${ln};${fn2};;${pfx};`,
-    `FN:${fn}`,
-  ];
-  if(jt)   lines.push(`TITLE:${jt}`);
+  const fn=fullName(), ln=v('f-ln'), fn2=v('f-fn'), pfx=v('f-acad');
+  const jt=v('f-jt-de'), tel=v('f-tel'), mob=v('f-mob'), mail=v('f-mail'), addr=v('f-addr');
+  const lines=['BEGIN:VCARD','VERSION:3.0',
+    `N:${ln};${fn2};;${pfx};`, `FN:${fn}`];
+  if(jt)lines.push(`TITLE:${jt}`);
   lines.push('ORG:Bundesministerium fuer Digitales und Staatsmodernisierung');
-  if(tel)  lines.push(`TEL;TYPE=WORK,VOICE:${tel}`);
-  if(mob)  lines.push(`TEL;TYPE=CELL:${mob}`);
-  if(mail) lines.push(`EMAIL;TYPE=INTERNET,PREF:${mail}`);
+  if(tel)lines.push(`TEL;TYPE=WORK,VOICE:${tel}`);
+  if(mob)lines.push(`TEL;TYPE=CELL:${mob}`);
+  if(mail)lines.push(`EMAIL;TYPE=INTERNET,PREF:${mail}`);
   if(addr){
-    const ci = addr.indexOf(',');
-    const street = ci>=0 ? addr.slice(0,ci).trim() : addr;
-    const rest   = ci>=0 ? addr.slice(ci+1).trim() : '';
-    const m = rest.match(/^(\d{4,5})\s+(.+)$/);
-    const zip = m?m[1]:'', city = m?m[2]:rest;
-    lines.push(`ADR;TYPE=WORK:;;${street};${city};;${zip};Deutschland`);
-  }
-  if(web){
-    const url = web.startsWith('http') ? web : 'https://'+web;
-    lines.push(`URL:${url}`);
+    const ci=addr.indexOf(',');
+    const street=ci>=0?addr.slice(0,ci).trim():addr;
+    const rest=ci>=0?addr.slice(ci+1).trim():'';
+    const m=rest.match(/^(\d{4,5})\s+(.+)$/);
+    lines.push(`ADR;TYPE=WORK:;;${street};${m?m[2]:rest};;${m?m[1]:''};Deutschland`);
   }
   lines.push('END:VCARD');
   return lines.join('\r\n');
 }
 
-function show(id, val){ document.getElementById(id).style.display = val ? 'flex' : 'none'; }
-function setText(id, val){ document.getElementById(id).textContent = val; }
+function set(id,val){document.getElementById(id).textContent=val;}
+function showEl(id,show){document.getElementById(id).style.display=show?'block':'none';}
+function setHtml(id,val){document.getElementById(id).innerHTML=val;}
 
 function generate(){
-  const name = fullName();
-  const tel  = v('f-tel'), mob = v('f-mob'), mail = v('f-mail');
-  const addr = v('f-addr'), web = v('f-web');
-  const jtDE = v('f-jt-de'), dDE = v('f-dept-de');
-  const jtEN = v('f-jt-en'), dEN = v('f-dept-en');
+  const name=fullName();
+  const tel=v('f-tel'), mob=v('f-mob'), mail=v('f-mail'), addr=v('f-addr');
+  const jtDE=v('f-jt-de'), d1DE=v('f-dept-de1'), d2DE=v('f-dept-de2');
+  const jtEN=v('f-jt-en'), d1EN=v('f-dept-en1'), d2EN=v('f-dept-en2');
 
   // Front
-  setText('d-name', name);
-  setText('d-jt',   jtDE);
-  setText('d-dept', dDE);
-  setText('d-tel',  tel);  show('d-tel-r',  !!tel);
-  setText('d-mob',  mob);  show('d-mob-r',  !!mob);
-  setText('d-mail', mail); show('d-mail-r', !!mail);
-  setText('d-addr', addr);
-  setText('d-web',  web);
+  set('d-name', name);
+  set('d-jt', jtDE);
+  setHtml('d-dept', d2DE ? d1DE+'<br>'+d2DE : d1DE);
+  set('d-addr', addr);
+  set('d-tel', tel); showEl('d-tel-row', !!tel);
+  set('d-mob', mob); showEl('d-mob-row', !!mob);
+  set('d-mail-val', mail); showEl('d-mail', !!mail);
 
   // Back
-  setText('e-name', name);
-  setText('e-jt',   jtEN);
-  setText('e-dept', dEN);
-  setText('e-tel',  tel);  show('e-tel-r',  !!tel);
-  setText('e-mob',  mob);  show('e-mob-r',  !!mob);
-  setText('e-mail', mail); show('e-mail-r', !!mail);
-  setText('e-addr', addr);
-  setText('e-web',  web);
+  set('e-name', name);
+  set('e-jt', jtEN);
+  setHtml('e-dept', d2EN ? d1EN+'<br>'+d2EN : d1EN);
 
   // QR Code
-  const qrDiv = document.getElementById('qr-code');
-  qrDiv.innerHTML = '';
-  try {
-    new QRCode(qrDiv, {
-      text: buildVCard(),
-      width: 145, height: 145,
-      colorDark: '#000000', colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
+  const qrDiv=document.getElementById('qr-code');
+  qrDiv.innerHTML='';
+  try{
+    new QRCode(qrDiv,{
+      text:buildVCard(), width:160, height:160,
+      colorDark:'#000000', colorLight:'#ffffff',
+      correctLevel:QRCode.CorrectLevel.M
     });
-  } catch(e){
-    qrDiv.innerHTML = '<div style="width:145px;height:145px;border:1px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:10px;color:#aaa;text-align:center;border-radius:4px">QR Code<br>wird geladen…</div>';
+  }catch(e){
+    qrDiv.innerHTML='<div style="width:160px;height:160px;border:1px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:10px;color:#aaa">QR Code<br>lädt...</div>';
   }
 }
 
-// Auto-update with debounce
 let timer;
-function debounced(){ clearTimeout(timer); timer = setTimeout(generate, 350); }
 document.querySelectorAll('input,select').forEach(el=>{
-  el.addEventListener('input', debounced);
-  el.addEventListener('change', debounced);
+  el.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(generate,300);});
+  el.addEventListener('change',generate);
 });
-
-// Initial render
 document.addEventListener('DOMContentLoaded', generate);
 </script>
 </body>
