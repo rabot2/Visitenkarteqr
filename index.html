@@ -74,15 +74,15 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 /* === LOGO === */
 .card-logo{
   display:block;
-  height:155px;
+  height:136px;   /* ≈17mm at 8px/mm – matches ~20mm on real card */
   width:auto;
-  max-width:340px;
+  max-width:320px;
 }
 
 /* === CARD FRONT === */
 .front{
   width:100%;height:100%;
-  padding:34px 40px 28px;
+  padding:32px 40px 26px;
   display:flex;
   flex-direction:column;
 }
@@ -90,44 +90,44 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   margin-top:auto;
   display:flex;
   flex-direction:column;
-  gap:0;
 }
 .card-name{
   font-family:'BundesSerif',Georgia,serif;
   font-weight:700;
-  font-size:30px;
+  font-size:29px;
   color:#000;
   letter-spacing:-.01em;
   line-height:1.1;
-  margin-bottom:6px;
+  margin-bottom:5px;
 }
 .card-title{
   font-family:'BundesSans',Arial,sans-serif;
   font-weight:400;
-  font-size:13px;
+  font-size:12.5px;
   color:#000;
-  line-height:1.4;
+  line-height:1.35;
+  margin-bottom:1px;
 }
 .card-dept{
   font-family:'BundesSans',Arial,sans-serif;
   font-weight:400;
-  font-size:13px;
+  font-size:12.5px;
   color:#000;
-  line-height:1.4;
-  margin-bottom:10px;
+  line-height:1.35;
+  margin-bottom:9px;
 }
 .card-contact{
   font-family:'BundesSans',Arial,sans-serif;
   font-weight:400;
-  font-size:14px;
+  font-size:13px;
   color:#000;
-  line-height:1.5;
+  line-height:1.55;
 }
 
 /* === CARD BACK === */
 .back{
   width:100%;height:100%;
-  padding:34px 40px 28px;
+  padding:32px 40px 26px;
   display:flex;
   flex-direction:column;
 }
@@ -135,19 +135,19 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   margin-top:auto;
   display:flex;
   align-items:flex-end;
-  gap:24px;
+  gap:16px;
 }
 .back .info-col{flex:1;min-width:0}
 .back .qr-col{
   flex-shrink:0;
-  width:165px;
+  width:152px;
   display:flex;
   justify-content:flex-end;
   align-items:flex-end;
 }
 #qr-code canvas,#qr-code img{
-  width:160px !important;
-  height:160px !important;
+  width:148px !important;
+  height:148px !important;
   display:block;
 }
 
@@ -162,14 +162,14 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   .card-wrap{page-break-after:always;margin:0}
   .card-wrap:last-child{page-break-after:auto}
   .bcard{width:85mm;height:55mm;box-shadow:none}
-  .front,.back{padding:4.2mm 5mm 3.5mm}
-  .card-logo{height:20mm;max-width:44mm}
-  .card-name{font-size:14pt;margin-bottom:1mm}
-  .card-title,.card-dept{font-size:6pt}
-  .card-dept{margin-bottom:2mm}
-  .card-contact{font-size:6.5pt;line-height:1.45}
-  .back .qr-col{width:20mm}
-  #qr-code canvas,#qr-code img{width:20mm !important;height:20mm !important}
+  .front,.back{padding:4mm 5mm 3.25mm}
+  .card-logo{height:17mm;max-width:40mm}
+  .card-name{font-size:13.5pt;margin-bottom:0.8mm}
+  .card-title{font-size:5.5pt;margin-bottom:0}
+  .card-dept{font-size:5.5pt;margin-bottom:1.8mm}
+  .card-contact{font-size:6pt;line-height:1.5}
+  .back .qr-col{width:19mm}
+  #qr-code canvas,#qr-code img{width:19mm !important;height:19mm !important}
 }
 </style>
 </head>
@@ -271,7 +271,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="js/qrcode.min.js"></script>
 <script>
 'use strict';
 function v(id){return document.getElementById(id).value.trim();}
@@ -328,14 +328,20 @@ function generate(){
   // QR Code
   const qrDiv=document.getElementById('qr-code');
   qrDiv.innerHTML='';
+  if(typeof QRCode==='undefined'){
+    console.error('QRCode library not loaded – check js/qrcode.min.js');
+    qrDiv.innerHTML='<div style="width:148px;height:148px;border:1.5px dashed #e00;display:flex;align-items:center;justify-content:center;font-size:10px;color:#e00;text-align:center;padding:8px">QR-Bibliothek<br>nicht geladen</div>';
+    return;
+  }
   try{
     new QRCode(qrDiv,{
-      text:buildVCard(), width:160, height:160,
+      text:buildVCard(), width:148, height:148,
       colorDark:'#000000', colorLight:'#ffffff',
       correctLevel:QRCode.CorrectLevel.M
     });
   }catch(e){
-    qrDiv.innerHTML='<div style="width:160px;height:160px;border:1px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:10px;color:#aaa">QR Code<br>lädt...</div>';
+    console.error('QRCode error:', e);
+    qrDiv.innerHTML='<div style="width:148px;height:148px;border:1px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:10px;color:#aaa;text-align:center">QR Code<br>Fehler</div>';
   }
 }
 
