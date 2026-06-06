@@ -354,7 +354,8 @@ function generate(){
     new QRCode(qrDiv,{
       text:buildVCard(), width:176, height:176,
       colorDark:'#000000', colorLight:'#ffffff',
-      correctLevel:QRCode.CorrectLevel.M
+      correctLevel:QRCode.CorrectLevel.M,
+      typeNumber:0
     });
   }catch(e){
     console.error('QRCode error:', e);
