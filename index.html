@@ -467,6 +467,7 @@ function switchTab(target){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.target===target));
   document.querySelector('.sidebar').classList.toggle('tab-active',target==='sidebar');
   document.querySelector('.preview').classList.toggle('tab-active',target==='preview');
+  if(target==='preview') scaleCards();
 }
 
 /* ===== MOBILE: card scaling ===== */
@@ -481,12 +482,27 @@ function scaleCards(){
   document.documentElement.style.setProperty('--card-scale',scale);
   document.querySelectorAll('.card-wrap').forEach(w=>{
     w.style.width=Math.round(680*scale)+'px';
-    w.style.height=Math.round(440*scale+28)+'px'; // +28 for plabel height
+    w.style.height=Math.round(440*scale+28)+'px';
   });
 }
 
+/* Tab buttons: always bind, regardless of viewport at load time */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>switchTab(btn.dataset.target));
+});
+
 let resizeTimer;
-window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(scaleCards,100);});
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(()=>{
+    scaleCards();
+    /* Entering mobile view: ensure one panel is visible */
+    if(window.innerWidth<=768){
+      const anyActive=document.querySelector('.sidebar.tab-active,.preview.tab-active');
+      if(!anyActive) switchTab('sidebar');
+    }
+  },100);
+});
 
 let inputTimer;
 document.querySelectorAll('input,select').forEach(el=>{
@@ -496,13 +512,8 @@ document.querySelectorAll('input,select').forEach(el=>{
 
 document.addEventListener('DOMContentLoaded',()=>{
   generate();
-  if(window.innerWidth<=768){
-    document.querySelectorAll('.tab-btn').forEach(btn=>{
-      btn.addEventListener('click',()=>switchTab(btn.dataset.target));
-    });
-    switchTab('sidebar');
-  }
   scaleCards();
+  if(window.innerWidth<=768) switchTab('sidebar');
 });
 </script>
 </body>
