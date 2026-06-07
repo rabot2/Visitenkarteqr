@@ -451,7 +451,7 @@ function generate(){
   }
   try{
     new QRCode(qrDiv,{
-      text:unescape(encodeURIComponent(buildVCard())), width:176, height:176,
+      text:buildVCard(), width:176, height:176,
       colorDark:'#000000', colorLight:'#ffffff',
       correctLevel:QRCode.CorrectLevel.M,
       typeNumber:0
