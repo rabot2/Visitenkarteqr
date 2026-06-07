@@ -1392,6 +1392,14 @@ var QRCode;
 'use strict';
 function v(id){return document.getElementById(id).value.trim();}
 
+function toGross(str){
+  return str
+    .replace(/ä/g,'ae').replace(/Ä/g,'Ae')
+    .replace(/ö/g,'oe').replace(/Ö/g,'Oe')
+    .replace(/ü/g,'ue').replace(/Ü/g,'Ue')
+    .replace(/ß/g,'ss');
+}
+
 function fullName(){
   return [v('f-acad'), v('f-fn'), v('f-ln')].filter(Boolean).join(' ');
 }
@@ -1437,8 +1445,12 @@ function generate(){
   set('d-mob', mob); showEl('d-mob-row', !!mob);
   set('d-mail-val', mail); showEl('d-mail', !!mail);
 
-  // Back
-  set('e-name', name);
+  // Back (gross: umlauts → ASCII, last name ALL CAPS)
+  const eFirst = toGross(v('f-fn'));
+  const eLast  = toGross(v('f-ln')).toUpperCase();
+  const eAcad  = toGross(v('f-acad'));
+  const eNameGross = [eAcad, eFirst, eLast].filter(Boolean).join(' ');
+  set('e-name', eNameGross);
   set('e-jt', jtEN);
   setHtml('e-dept', d2EN ? d1EN+'<br>'+d2EN : d1EN);
 
