@@ -1009,10 +1009,10 @@ function buildVCard(){
   const lines=['BEGIN:VCARD','VERSION:3.0',
     `N:${ln};${fn2};;${pfx};`, `FN:${fn}`];
   if(jt)lines.push(`TITLE:${jt}`);
-  lines.push('ORG:Bundesministerium fuer Digitales und Staatsmodernisierung');
+  lines.push('ORG:BMDS');
   if(tel)lines.push(`TEL;TYPE=WORK,VOICE:${tel}`);
   if(mob)lines.push(`TEL;TYPE=CELL:${mob}`);
-  if(mail)lines.push(`EMAIL;TYPE=INTERNET,PREF:${mail}`);
+  if(mail)lines.push(`EMAIL:${mail}`);
   if(addrInQr && addr){
     const ci=addr.indexOf(',');
     const street=ci>=0?addr.slice(0,ci).trim():addr;
