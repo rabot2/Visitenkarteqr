@@ -338,7 +338,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   </div>
 
   <button class="btn btn-primary" onclick="generate()">&#9654; Visitenkarte generieren</button>
-  <button class="btn btn-secondary" onclick="printPDF()">&#128424; Als PDF drucken / speichern</button>
+  <button class="btn btn-secondary btn-pdf" onclick="downloadPDF(this)">&#11015; Als PDF herunterladen</button>
 </aside>
 
 <!-- ===== VORSCHAU ===== -->
@@ -391,9 +391,11 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 <!-- Mobile sticky action bar -->
 <div class="mobile-action-bar">
   <button class="btn btn-primary" onclick="generate();switchTab('preview')">&#9654; Generieren</button>
-  <button class="btn btn-secondary" onclick="printPDF()">&#128424; PDF</button>
+  <button class="btn btn-secondary btn-pdf" onclick="downloadPDF(this)">&#11015; PDF</button>
 </div>
 
+<script src="js/jspdf.umd.min.js"></script>
+<script src="js/html2canvas.min.js"></script>
 <script src="js/qrcode.js"></script>
 <script>
 'use strict';
@@ -525,48 +527,37 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(window.innerWidth<=768) switchTab('sidebar');
 });
 
-function printPDF(){
-  // Capture QR code canvas as image before cloning (canvas pixel data is not cloned)
-  const qrCanvas=document.querySelector('#qr-code canvas');
-  const qrSrc=qrCanvas ? qrCanvas.toDataURL('image/png')
-             : (document.querySelector('#qr-code img')||{}).src || null;
-
-  // Build card HTML for print window: 2 cards, each on its own page
-  let cardsHTML='';
-  document.querySelectorAll('.card-wrap').forEach((wrap,i,all)=>{
-    const clone=wrap.querySelector('.bcard').cloneNode(true);
-    if(qrSrc){
-      const qrDiv=clone.querySelector('#qr-code');
-      if(qrDiv) qrDiv.innerHTML=`<img src="${qrSrc}" style="width:22mm;height:22mm;display:block">`;
+async function downloadPDF(btn){
+  const orig=btn?btn.innerHTML:'';
+  document.querySelectorAll('.btn-pdf').forEach(b=>{b.disabled=true;b.innerHTML='Erstelle PDF…';});
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({unit:'mm',format:[85,55]});
+    const cards=[...document.querySelectorAll('.bcard')];
+    for(let i=0;i<cards.length;i++){
+      if(i>0)doc.addPage([85,55]);
+      const card=cards[i];
+      // Remove mobile scale transform so html2canvas captures at full 680×440px
+      const savedTransform=card.style.transform;
+      card.style.transform='none';
+      const canvas=await html2canvas(card,{
+        scale:2,
+        width:680,height:440,
+        backgroundColor:'#ffffff',
+        logging:false,
+        useCORS:true
+      });
+      card.style.transform=savedTransform;
+      doc.addImage(canvas.toDataURL('image/jpeg',0.97),'JPEG',0,0,85,55);
     }
-    const last=i===all.length-1;
-    cardsHTML+=`<div class="page"${last?' style="page-break-after:auto"':''}>${clone.outerHTML}</div>`;
-  });
-
-  // Collect all inline <style> content (includes base64 fonts in standalone)
-  const css=Array.from(document.querySelectorAll('style')).map(s=>s.textContent).join('\n');
-
-  const win=window.open('','_blank');
-  if(!win){alert('Bitte Popups für diese Seite erlauben und erneut klicken.');return;}
-  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-    @page{size:85mm 55mm;margin:0}
-    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-    body{background:#fff}
-    .page{page-break-after:always}
-    ${css}
-    .bcard{width:85mm!important;height:55mm!important;box-shadow:none!important;transform:none!important}
-    .card-logo{height:23mm!important;width:auto!important}
-    .front .card-body{padding:0 5mm 3mm 12mm!important}
-    .back .card-body{padding:0 3mm 3mm 12mm!important}
-    .card-name{font-size:14pt!important;margin-bottom:.75mm!important}
-    .card-title{font-size:5.5pt!important}
-    .card-dept{font-size:5.5pt!important;margin-bottom:1.4mm!important}
-    .card-contact{font-size:6.5pt!important;line-height:1.5!important}
-    #qr-code canvas,#qr-code img{width:22mm!important;height:22mm!important}
-  </style></head><body>${cardsHTML}<script>
-    window.addEventListener('load',function(){setTimeout(function(){window.print();},400);});
-  <\/script></body></html>`);
-  win.document.close();
+    doc.save('visitenkarte-bmds.pdf');
+  }catch(e){
+    console.error('PDF error:',e);
+    alert('Fehler bei der PDF-Erstellung: '+e.message);
+  }finally{
+    document.querySelectorAll('.btn-pdf').forEach(b=>{b.disabled=false;});
+    if(btn)btn.innerHTML=orig;
+  }
 }
 </script>
 </body>
