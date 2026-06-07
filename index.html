@@ -51,6 +51,9 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 .btn-primary:hover{background:#333}
 .btn-secondary{background:#fff;color:#1a1a1a;border:2px solid #1a1a1a !important;margin-top:8px}
 .btn-secondary:hover{background:#f5f5f5}
+.chk-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.chk-row input[type=checkbox]{width:16px;height:16px;min-height:unset;flex-shrink:0;accent-color:#1a1a1a;cursor:pointer}
+.chk-row label{font-size:11.5px;font-weight:400;color:#555;margin:0;cursor:pointer}
 
 /* PREVIEW */
 .preview{padding:28px 32px;overflow-y:auto}
@@ -329,6 +332,10 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 
   <div class="sec">Ministerium</div>
   <div class="fg"><label>Adresse</label><input type="text" id="f-addr" value="Alt-Moabit 140, 10557 Berlin"></div>
+  <div class="fg chk-row">
+    <input type="checkbox" id="f-addr-qr">
+    <label for="f-addr-qr">Adresse in QR-Code aufnehmen</label>
+  </div>
 
   <button class="btn btn-primary" onclick="generate()">&#9654; Visitenkarte generieren</button>
   <button class="btn btn-secondary" onclick="window.print()">&#128424; Als PDF drucken / speichern</button>
@@ -399,6 +406,7 @@ function fullName(){
 function buildVCard(){
   const fn=fullName(), ln=v('f-ln'), fn2=v('f-fn'), pfx=v('f-acad');
   const jt=v('f-jt-de'), tel=v('f-tel'), mob=v('f-mob'), mail=v('f-mail'), addr=v('f-addr');
+  const addrInQr=document.getElementById('f-addr-qr').checked;
   const lines=['BEGIN:VCARD','VERSION:3.0',
     `N:${ln};${fn2};;${pfx};`, `FN:${fn}`];
   if(jt)lines.push(`TITLE:${jt}`);
@@ -406,7 +414,7 @@ function buildVCard(){
   if(tel)lines.push(`TEL;TYPE=WORK,VOICE:${tel}`);
   if(mob)lines.push(`TEL;TYPE=CELL:${mob}`);
   if(mail)lines.push(`EMAIL;TYPE=INTERNET,PREF:${mail}`);
-  if(addr){
+  if(addrInQr && addr){
     const ci=addr.indexOf(',');
     const street=ci>=0?addr.slice(0,ci).trim():addr;
     const rest=ci>=0?addr.slice(ci+1).trim():'';
@@ -509,6 +517,7 @@ document.querySelectorAll('input,select').forEach(el=>{
   el.addEventListener('input',()=>{clearTimeout(inputTimer);inputTimer=setTimeout(generate,300);});
   el.addEventListener('change',generate);
 });
+document.getElementById('f-addr-qr').addEventListener('change',generate);
 
 document.addEventListener('DOMContentLoaded',()=>{
   generate();
