@@ -1523,12 +1523,11 @@ async function downloadPDF(btn){
   document.querySelectorAll('.btn-pdf').forEach(b=>{b.disabled=true;b.innerHTML='Erstelle PDF…';});
   try{
     const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({unit:'mm',format:[85,55]});
+    const doc=new jsPDF({orientation:'landscape',unit:'mm',format:[85,55]});
     const cards=[...document.querySelectorAll('.bcard')];
     for(let i=0;i<cards.length;i++){
-      if(i>0)doc.addPage([85,55]);
+      if(i>0)doc.addPage([85,55],'landscape');
       const card=cards[i];
-      // Remove mobile scale transform so html2canvas captures at full 680×440px
       const savedTransform=card.style.transform;
       card.style.transform='none';
       const canvas=await html2canvas(card,{
@@ -1541,7 +1540,11 @@ async function downloadPDF(btn){
       card.style.transform=savedTransform;
       doc.addImage(canvas.toDataURL('image/jpeg',0.97),'JPEG',0,0,85,55);
     }
-    doc.save('visitenkarte-bmds.pdf');
+    const toA=s=>s.replace(/ä/g,'ae').replace(/Ä/g,'Ae').replace(/ö/g,'oe')
+                   .replace(/Ö/g,'Oe').replace(/ü/g,'ue').replace(/Ü/g,'Ue')
+                   .replace(/ß/g,'ss').replace(/[^a-zA-Z0-9]/g,'');
+    const namePart=[toA(v('f-ln')),toA(v('f-fn'))].filter(Boolean).join('-');
+    doc.save('visitenkarte-bmds'+(namePart?'-'+namePart:'')+'.pdf');
   }catch(e){
     console.error('PDF error:',e);
     alert('Fehler bei der PDF-Erstellung: '+e.message);
