@@ -90,11 +90,11 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   flex-direction:column;
 }
 
-/* Name: ~14pt on real card */
+/* Name: ~12pt on real card */
 .card-name{
-  font-family:'BundesSerif',Georgia,serif;
+  font-family:'BundesSans',Arial,sans-serif;
   font-weight:700;
-  font-size:39px;
+  font-size:34px;
   color:#000;
   letter-spacing:-.01em;
   line-height:1.1;
@@ -258,7 +258,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   .card-logo{height:23mm;width:auto}
   .front .card-body{padding:0 5mm 3mm 12mm}
   .back .card-body{padding:0 3mm 3mm 12mm}
-  .card-name{font-size:14pt;margin-bottom:0.75mm}
+  .card-name{font-size:12pt;margin-bottom:0.75mm}
   .card-title{font-size:5.5pt}
   .card-dept{font-size:5.5pt;margin-bottom:1.4mm}
   .card-contact{font-size:6.5pt;line-height:1.5}
@@ -1392,14 +1392,6 @@ var QRCode;
 'use strict';
 function v(id){return document.getElementById(id).value.trim();}
 
-function toGross(str){
-  return str
-    .replace(/ä/g,'ae').replace(/Ä/g,'Ae')
-    .replace(/ö/g,'oe').replace(/Ö/g,'Oe')
-    .replace(/ü/g,'ue').replace(/Ü/g,'Ue')
-    .replace(/ß/g,'ss');
-}
-
 function fullName(){
   return [v('f-acad'), v('f-fn'), v('f-ln')].filter(Boolean).join(' ');
 }
@@ -1445,12 +1437,8 @@ function generate(){
   set('d-mob', mob); showEl('d-mob-row', !!mob);
   set('d-mail-val', mail); showEl('d-mail', !!mail);
 
-  // Back (gross: umlauts → ASCII, last name ALL CAPS)
-  const eFirst = toGross(v('f-fn'));
-  const eLast  = toGross(v('f-ln')).toUpperCase();
-  const eAcad  = toGross(v('f-acad'));
-  const eNameGross = [eAcad, eFirst, eLast].filter(Boolean).join(' ');
-  set('e-name', eNameGross);
+  // Back
+  set('e-name', name);
   set('e-jt', jtEN);
   setHtml('e-dept', d2EN ? d1EN+'<br>'+d2EN : d1EN);
 
