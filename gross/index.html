@@ -162,10 +162,10 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   justify-content:flex-end;
   align-items:flex-end;
 }
-/* QR code ~22mm on real card */
+/* QR code ~20mm on real card */
 #qr-code canvas,#qr-code img{
-  width:176px !important;
-  height:176px !important;
+  width:158px !important;
+  height:158px !important;
   display:block;
 }
 
@@ -276,7 +276,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   .card-title{font-size:6pt}
   .card-dept{font-size:6pt;margin-bottom:1.4mm}
   .card-contact{font-size:6pt;line-height:1.5}
-  #qr-code canvas,#qr-code img{width:22mm !important;height:22mm !important}
+  #qr-code canvas,#qr-code img{width:20mm !important;height:20mm !important}
 }
 </style>
 </head>
@@ -1478,7 +1478,7 @@ function generate(){
   }
   try{
     new QRCode(qrDiv,{
-      text:buildVCard(), width:176, height:176,
+      text:buildVCard(), width:158, height:158,
       colorDark:'#000000', colorLight:'#ffffff',
       correctLevel:QRCode.CorrectLevel.M,
       typeNumber:0
