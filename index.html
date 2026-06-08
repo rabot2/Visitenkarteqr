@@ -404,6 +404,13 @@ function fullName(){
   return [v('f-acad'), v('f-fn'), v('f-ln')].filter(Boolean).join(' ');
 }
 
+function replaceUmlauts(s){
+  return s.replace(/ä/g,'ae').replace(/Ä/g,'Ae')
+          .replace(/ö/g,'oe').replace(/Ö/g,'Oe')
+          .replace(/ü/g,'ue').replace(/Ü/g,'Ue')
+          .replace(/ß/g,'ss');
+}
+
 function buildVCard(){
   const fn=fullName(), ln=v('f-ln'), fn2=v('f-fn'), pfx=v('f-acad');
   const jt=v('f-jt-de'), tel=v('f-tel'), mob=v('f-mob'), mail=v('f-mail'), addr=v('f-addr');
@@ -445,8 +452,8 @@ function generate(){
   set('d-mob', mob); showEl('d-mob-row', !!mob);
   set('d-mail-val', mail); showEl('d-mail', !!mail);
 
-  // Back
-  set('e-name', name);
+  // Back (name: umlauts → ASCII for English card)
+  set('e-name', replaceUmlauts(name));
   set('e-jt', jtEN);
   setHtml('e-dept', d2EN ? d1EN+'<br>'+d2EN : d1EN);
 
