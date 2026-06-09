@@ -37,6 +37,9 @@ def replace_bg(m):
     return f"url('data:{mime(path)};base64,{b64(path)}')"
 src = re.sub(r"url\('(backgrounds/[^']+)'\)", replace_bg, src)
 
+# 2c. Inline img src="backgrounds/..."
+src = re.sub(r'src="(backgrounds/[^"]+)"', replace_img, src)
+
 # 3. Inline <script src="js/..."></script>
 def replace_script(m):
     path = BASE / m.group(1)

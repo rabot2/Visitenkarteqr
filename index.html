@@ -177,6 +177,15 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   border-radius:3px;
   line-height:0;
 }
+/* Chevron arrows: top-right, vertically centred in logo zone, right-aligned with QR code */
+.cd-arrows-img{
+  position:absolute;
+  height:80px;
+  width:auto;
+  top:52px;
+  right:24px;
+  pointer-events:none;
+}
 /* CD tagline: #WirMachen + URL bottom-right of front card */
 .cd-tagline{
   position:absolute;
@@ -301,6 +310,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   #qr-code canvas,#qr-code img{width:18mm !important;height:18mm !important}
   #qr-code{padding:1mm;border-radius:1mm}
   .cd-tagline{font-size:7pt;bottom:3mm;right:5mm}
+  .cd-arrows-img{height:10mm;top:6.5mm;right:3mm}
 }
 </style>
 </head>
@@ -374,6 +384,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Vorderseite &#8211; Deutsch</div>
     <div class="bcard">
       <div class="front">
+        <img class="cd-arrows-img" src="backgrounds/bmds_arrows.png" alt="">
         <img class="card-logo" src="logos/bmds_logo_de_white.svg" alt="BMDS Logo DE">
         <div class="cd-tagline">#Wir<strong>Machen</strong></div>
         <div class="card-body">
@@ -396,6 +407,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Rückseite &#8211; English</div>
     <div class="bcard">
       <div class="back">
+        <img class="cd-arrows-img" src="backgrounds/bmds_arrows.png" alt="">
         <img class="card-logo" src="logos/bmds_logo_en_white.svg" alt="BMDS Logo EN">
         <div class="card-body">
           <div class="info-col">
