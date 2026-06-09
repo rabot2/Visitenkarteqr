@@ -13,6 +13,7 @@ def mime(path):
     if p.endswith('.ttf'):  return 'font/truetype'
     if p.endswith('.svg'):  return 'image/svg+xml'
     if p.endswith('.png'):  return 'image/png'
+    if p.endswith('.jpg') or p.endswith('.jpeg'): return 'image/jpeg'
     if p.endswith('.js'):   return 'application/javascript'
     return 'application/octet-stream'
 
@@ -29,6 +30,12 @@ def replace_img(m):
     path = BASE / m.group(1)
     return f'src="data:{mime(path)};base64,{b64(path)}"'
 src = re.sub(r'src="(logos/[^"]+)"', replace_img, src)
+
+# 2b. Inline background-image url('backgrounds/...')
+def replace_bg(m):
+    path = BASE / m.group(1)
+    return f"url('data:{mime(path)};base64,{b64(path)}')"
+src = re.sub(r"url\('(backgrounds/[^']+)'\)", replace_bg, src)
 
 # 3. Inline <script src="js/..."></script>
 def replace_script(m):
