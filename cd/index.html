@@ -62,11 +62,12 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 .card-wrap{margin-bottom:36px}
 
 /* ===== BUSINESS CARD =====
-   Real size: 85mm × 55mm  +  2mm bleed all around = 89mm × 59mm
-   Preview scale: 8px/mm  →  bleed area: 712 × 472px
+   Real size: 85mm × 55mm
+   Preview scale: 680px / 85mm = 8px/mm → 680 × 440px (no bleed in preview)
+   PDF export adds 2mm bleed (712×472px) via JS before capture
 */
 .bcard{
-  width:712px; height:472px;
+  width:680px; height:440px;
   background-image:url('backgrounds/bmds_bg.jpg');
   background-size:cover;
   background-position:right top;
@@ -74,10 +75,10 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   font-family:'BundesSans',Arial,sans-serif;
   position:relative;
 }
-/* card-face = 85×55mm / 680×440px content area, offset by 2mm bleed */
+/* card-face fills bcard in preview; PDF export sets inset:16px temporarily */
 .card-face{
   position:absolute;
-  inset:16px;
+  inset:0;
   overflow:hidden;
 }
 
@@ -546,11 +547,11 @@ function scaleCards(){
     document.querySelectorAll('.card-wrap').forEach(w=>{w.style.width='';w.style.height='';});
     return;
   }
-  const scale=Math.min(1,(window.innerWidth-32)/712);
+  const scale=Math.min(1,(window.innerWidth-32)/680);
   document.documentElement.style.setProperty('--card-scale',scale);
   document.querySelectorAll('.card-wrap').forEach(w=>{
-    w.style.width=Math.round(712*scale)+'px';
-    w.style.height=Math.round(472*scale+28)+'px';
+    w.style.width=Math.round(680*scale)+'px';
+    w.style.height=Math.round(440*scale+28)+'px';
   });
 }
 
@@ -597,7 +598,11 @@ async function downloadPDF(btn){
       if(i>0)doc.addPage([89,59],'landscape');
       const card=cards[i];
       const savedTransform=card.style.transform;
+      // Temporarily expand to bleed dimensions for capture
       card.style.transform='none';
+      card.style.width='712px';
+      card.style.height='472px';
+      card.querySelectorAll('.card-face').forEach(f=>f.style.inset='16px');
       const canvas=await html2canvas(card,{
         scale:2,
         width:712,height:472,
@@ -605,6 +610,10 @@ async function downloadPDF(btn){
         logging:false,
         useCORS:true
       });
+      // Restore screen dimensions
+      card.style.width='';
+      card.style.height='';
+      card.querySelectorAll('.card-face').forEach(f=>f.style.inset='');
       card.style.transform=savedTransform;
       doc.addImage(canvas.toDataURL('image/jpeg',0.97),'JPEG',0,0,89,59);
     }
