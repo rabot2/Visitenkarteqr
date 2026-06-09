@@ -178,10 +178,11 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 /* Three decorative chevron arrows, top-right of card */
 .cd-arrows{
   position:absolute;
-  top:8px;
-  right:8px;
-  width:185px;
+  top:16px;
+  right:-18px;
+  width:248px;
   pointer-events:none;
+  overflow:visible;
 }
 /* CD tagline: #WirMachen + URL bottom-right of front card */
 .cd-tagline{
@@ -307,7 +308,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   #qr-code canvas,#qr-code img{width:18mm !important;height:18mm !important}
   #qr-code{padding:1mm;border-radius:1mm}
   .cd-tagline{font-size:7pt;bottom:3mm;right:5mm}
-  .cd-arrows{width:28mm;top:1mm;right:1mm}
+  .cd-arrows{width:31mm;top:2mm;right:-2.5mm}
 }
 </style>
 </head>
@@ -381,10 +382,11 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Vorderseite &#8211; Deutsch</div>
     <div class="bcard">
       <div class="front">
-        <svg class="cd-arrows" viewBox="0 0 175 115" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M0,0 L37,0 L55,57 L37,115 L0,115 L20,57 Z" fill="#1A1F85"/>
-          <path d="M58,0 L95,0 L113,57 L95,115 L58,115 L78,57 Z" fill="#1A1F85"/>
-          <path d="M116,0 L153,0 L171,57 L153,115 L116,115 L136,57 Z" fill="#1A1F85"/>
+        <svg class="cd-arrows" viewBox="0 0 247 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#1A1F85" fill-rule="evenodd" d="
+            M0,0 L22,0 L77,55 L22,110 L0,110 Z  M0,0 L18,55 L0,110 Z
+            M85,0 L107,0 L162,55 L107,110 L85,110 Z  M85,0 L103,55 L85,110 Z
+            M170,0 L192,0 L247,55 L192,110 L170,110 Z  M170,0 L188,55 L170,110 Z"/>
         </svg>
         <img class="card-logo" src="logos/bmds_logo_de_weiss.svg" alt="BMDS Logo DE">
         <div class="cd-tagline">#Wir<strong>Machen</strong></div>
@@ -408,10 +410,11 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Rückseite &#8211; English</div>
     <div class="bcard">
       <div class="back">
-        <svg class="cd-arrows" viewBox="0 0 175 115" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M0,0 L37,0 L55,57 L37,115 L0,115 L20,57 Z" fill="#1A1F85"/>
-          <path d="M58,0 L95,0 L113,57 L95,115 L58,115 L78,57 Z" fill="#1A1F85"/>
-          <path d="M116,0 L153,0 L171,57 L153,115 L116,115 L136,57 Z" fill="#1A1F85"/>
+        <svg class="cd-arrows" viewBox="0 0 247 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#1A1F85" fill-rule="evenodd" d="
+            M0,0 L22,0 L77,55 L22,110 L0,110 Z  M0,0 L18,55 L0,110 Z
+            M85,0 L107,0 L162,55 L107,110 L85,110 Z  M85,0 L103,55 L85,110 Z
+            M170,0 L192,0 L247,55 L192,110 L170,110 Z  M170,0 L188,55 L170,110 Z"/>
         </svg>
         <img class="card-logo" src="logos/bmds_logo_en_weiss.svg" alt="BMDS Logo EN">
         <div class="card-body">
