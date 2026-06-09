@@ -67,7 +67,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 */
 .bcard{
   width:680px; height:440px;
-  background:linear-gradient(135deg, #00A99D 0%, #3B4ED0 50%, #C0187A 100%);
+  background:linear-gradient(135deg, #00A99D 0%, #2030B8 50%, #C0187A 100%);
   box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);
   overflow:hidden;
   font-family:'BundesSans',Arial,sans-serif;
@@ -174,6 +174,14 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   padding:5px;
   border-radius:3px;
   line-height:0;
+}
+/* Three decorative chevron arrows, top-right of card */
+.cd-arrows{
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:185px;
+  pointer-events:none;
 }
 /* CD tagline: #WirMachen + URL bottom-right of front card */
 .cd-tagline{
@@ -299,6 +307,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   #qr-code canvas,#qr-code img{width:18mm !important;height:18mm !important}
   #qr-code{padding:1mm;border-radius:1mm}
   .cd-tagline{font-size:6pt;bottom:3mm;right:5mm}
+  .cd-arrows{width:28mm;top:1mm;right:1mm}
 }
 </style>
 </head>
@@ -372,7 +381,12 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Vorderseite &#8211; Deutsch</div>
     <div class="bcard">
       <div class="front">
-        <img class="card-logo" src="logos/bmds_logo_de_white.svg" alt="BMDS Logo DE">
+        <svg class="cd-arrows" viewBox="0 0 175 115" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0,0 L37,0 L55,57 L37,115 L0,115 L20,57 Z" fill="#1A1F85"/>
+          <path d="M58,0 L95,0 L113,57 L95,115 L58,115 L78,57 Z" fill="#1A1F85"/>
+          <path d="M116,0 L153,0 L171,57 L153,115 L116,115 L136,57 Z" fill="#1A1F85"/>
+        </svg>
+        <img class="card-logo" src="logos/bmds_logo_de_weiss.svg" alt="BMDS Logo DE">
         <div class="cd-tagline">#Wir<strong>Machen</strong><br>www.bmds.bund.de</div>
         <div class="card-body">
           <div class="card-name" id="d-name">Ralf Käck</div>
@@ -394,7 +408,12 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Rückseite &#8211; English</div>
     <div class="bcard">
       <div class="back">
-        <img class="card-logo" src="logos/bmds_logo_en_white.svg" alt="BMDS Logo EN">
+        <svg class="cd-arrows" viewBox="0 0 175 115" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0,0 L37,0 L55,57 L37,115 L0,115 L20,57 Z" fill="#1A1F85"/>
+          <path d="M58,0 L95,0 L113,57 L95,115 L58,115 L78,57 Z" fill="#1A1F85"/>
+          <path d="M116,0 L153,0 L171,57 L153,115 L116,115 L136,57 Z" fill="#1A1F85"/>
+        </svg>
+        <img class="card-logo" src="logos/bmds_logo_en_weiss.svg" alt="BMDS Logo EN">
         <div class="card-body">
           <div class="info-col">
             <div class="card-name" id="e-name">Ralf Käck</div>
