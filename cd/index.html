@@ -88,14 +88,20 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   inset:16px;
   overflow:hidden;
 }
-/* Trim corner marks: L-shaped, at the 4 trim-edge corners, within the bleed zone.
-   Inner corner of each L lands exactly on the trim line (16px from bleed edge).
-   Arms are 12px long → stay within the 16px bleed; cut off when card is trimmed. */
-.trim-mark{position:absolute;width:12px;height:12px;pointer-events:none}
-.trim-mark-tl{top:4px;left:4px;border-bottom:1px solid rgba(255,255,255,.65);border-right:1px solid rgba(255,255,255,.65)}
-.trim-mark-tr{top:4px;right:4px;border-bottom:1px solid rgba(255,255,255,.65);border-left:1px solid rgba(255,255,255,.65)}
-.trim-mark-bl{bottom:4px;left:4px;border-top:1px solid rgba(255,255,255,.65);border-right:1px solid rgba(255,255,255,.65)}
-.trim-mark-br{bottom:4px;right:4px;border-top:1px solid rgba(255,255,255,.65);border-left:1px solid rgba(255,255,255,.65)}
+/* Trim marks: offset-print style — 2 separate ticks per corner, no L-connection.
+   Each tick lies in the 16px bleed zone on the extended axis of the cut line.
+   3px gap before the trim edge; marks are cut off when the card is trimmed. */
+.trim-mark{position:absolute;background:rgba(255,255,255,.75);pointer-events:none}
+/* Horizontal ticks – on the extended axis of the top/bottom trim lines */
+.tm-tl-h{top:13px;left:2px;width:10px;height:1px}
+.tm-tr-h{top:13px;right:2px;width:10px;height:1px}
+.tm-bl-h{bottom:13px;left:2px;width:10px;height:1px}
+.tm-br-h{bottom:13px;right:2px;width:10px;height:1px}
+/* Vertical ticks – on the extended axis of the left/right trim lines */
+.tm-tl-v{top:2px;left:13px;width:1px;height:10px}
+.tm-tr-v{top:2px;right:13px;width:1px;height:10px}
+.tm-bl-v{bottom:2px;left:13px;width:1px;height:10px}
+.tm-br-v{bottom:2px;right:13px;width:1px;height:10px}
 
 /* === LOGO ===
    SVG has internal whitespace, so img sits flush at top-left (no card padding).
@@ -321,11 +327,16 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   .bcard-viewport{width:89mm;height:59mm;overflow:visible;box-shadow:none;position:static}
   .bcard{width:89mm;height:59mm;position:static;top:0;left:0;transform:none !important}
   .card-face{inset:2mm}
-  .trim-mark{width:1.5mm;height:1.5mm}
-  .trim-mark-tl{top:0.5mm;left:0.5mm}
-  .trim-mark-tr{top:0.5mm;right:0.5mm}
-  .trim-mark-bl{bottom:0.5mm;left:0.5mm}
-  .trim-mark-br{bottom:0.5mm;right:0.5mm}
+  .tm-tl-h,.tm-tr-h,.tm-bl-h,.tm-br-h{height:0.13mm;width:1.25mm}
+  .tm-tl-v,.tm-tr-v,.tm-bl-v,.tm-br-v{width:0.13mm;height:1.25mm}
+  .tm-tl-h,.tm-bl-h{left:0.25mm}
+  .tm-tr-h,.tm-br-h{right:0.25mm}
+  .tm-tl-v,.tm-tr-v{top:0.25mm}
+  .tm-bl-v,.tm-br-v{bottom:0.25mm}
+  .tm-tl-h,.tm-tr-h{top:1.6mm}
+  .tm-bl-h,.tm-br-h{bottom:1.6mm}
+  .tm-tl-v,.tm-bl-v{left:1.6mm}
+  .tm-tr-v,.tm-br-v{right:1.6mm}
   .front,.back{padding:0}
   .card-logo{height:23mm;width:auto}
   .front .card-body{padding:0 5mm 3mm 12mm}
@@ -412,10 +423,14 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Vorderseite &#8211; Deutsch</div>
     <div class="bcard-viewport">
     <div class="bcard">
-      <div class="trim-mark trim-mark-tl"></div>
-      <div class="trim-mark trim-mark-tr"></div>
-      <div class="trim-mark trim-mark-bl"></div>
-      <div class="trim-mark trim-mark-br"></div>
+      <div class="trim-mark tm-tl-h"></div>
+      <div class="trim-mark tm-tr-h"></div>
+      <div class="trim-mark tm-bl-h"></div>
+      <div class="trim-mark tm-br-h"></div>
+      <div class="trim-mark tm-tl-v"></div>
+      <div class="trim-mark tm-tr-v"></div>
+      <div class="trim-mark tm-bl-v"></div>
+      <div class="trim-mark tm-br-v"></div>
       <div class="card-face">
       <div class="front">
         <img class="cd-arrows-img" src="backgrounds/bmds_arrows.png" alt="">
@@ -443,10 +458,14 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Rückseite &#8211; English</div>
     <div class="bcard-viewport">
     <div class="bcard">
-      <div class="trim-mark trim-mark-tl"></div>
-      <div class="trim-mark trim-mark-tr"></div>
-      <div class="trim-mark trim-mark-bl"></div>
-      <div class="trim-mark trim-mark-br"></div>
+      <div class="trim-mark tm-tl-h"></div>
+      <div class="trim-mark tm-tr-h"></div>
+      <div class="trim-mark tm-bl-h"></div>
+      <div class="trim-mark tm-br-h"></div>
+      <div class="trim-mark tm-tl-v"></div>
+      <div class="trim-mark tm-tr-v"></div>
+      <div class="trim-mark tm-bl-v"></div>
+      <div class="trim-mark tm-br-v"></div>
       <div class="card-face">
       <div class="back">
         <img class="cd-arrows-img" src="backgrounds/bmds_arrows.png" alt="">
