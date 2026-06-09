@@ -67,7 +67,9 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 */
 .bcard{
   width:680px; height:440px;
-  background:linear-gradient(135deg, #00A99D 0%, #2030B8 50%, #C0187A 100%);
+  background-image:url('backgrounds/bmds_bg.jpg');
+  background-size:cover;
+  background-position:right top;
   box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);
   overflow:hidden;
   font-family:'BundesSans',Arial,sans-serif;
@@ -174,15 +176,6 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   padding:5px;
   border-radius:3px;
   line-height:0;
-}
-/* Three decorative chevron arrows, top-right of card */
-.cd-arrows{
-  position:absolute;
-  top:16px;
-  right:-18px;
-  width:248px;
-  pointer-events:none;
-  overflow:visible;
 }
 /* CD tagline: #WirMachen + URL bottom-right of front card */
 .cd-tagline{
@@ -308,7 +301,6 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   #qr-code canvas,#qr-code img{width:18mm !important;height:18mm !important}
   #qr-code{padding:1mm;border-radius:1mm}
   .cd-tagline{font-size:7pt;bottom:3mm;right:5mm}
-  .cd-arrows{width:31mm;top:2mm;right:-2.5mm}
 }
 </style>
 </head>
@@ -382,12 +374,6 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Vorderseite &#8211; Deutsch</div>
     <div class="bcard">
       <div class="front">
-        <svg class="cd-arrows" viewBox="0 0 247 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path fill="#1A1F85" fill-rule="evenodd" d="
-            M0,0 L22,0 L77,55 L22,110 L0,110 Z  M0,0 L18,55 L0,110 Z
-            M85,0 L107,0 L162,55 L107,110 L85,110 Z  M85,0 L103,55 L85,110 Z
-            M170,0 L192,0 L247,55 L192,110 L170,110 Z  M170,0 L188,55 L170,110 Z"/>
-        </svg>
         <img class="card-logo" src="logos/bmds_logo_de_weiss.svg" alt="BMDS Logo DE">
         <div class="cd-tagline">#Wir<strong>Machen</strong></div>
         <div class="card-body">
@@ -410,12 +396,6 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Rückseite &#8211; English</div>
     <div class="bcard">
       <div class="back">
-        <svg class="cd-arrows" viewBox="0 0 247 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path fill="#1A1F85" fill-rule="evenodd" d="
-            M0,0 L22,0 L77,55 L22,110 L0,110 Z  M0,0 L18,55 L0,110 Z
-            M85,0 L107,0 L162,55 L107,110 L85,110 Z  M85,0 L103,55 L85,110 Z
-            M170,0 L192,0 L247,55 L192,110 L170,110 Z  M170,0 L188,55 L170,110 Z"/>
-        </svg>
         <img class="card-logo" src="logos/bmds_logo_en_weiss.svg" alt="BMDS Logo EN">
         <div class="card-body">
           <div class="info-col">
