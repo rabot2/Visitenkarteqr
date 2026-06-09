@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visitenkarten-Generator – BMDS</title>
+<style>
+@font-face {
+  font-family: 'BundesSans';
+  src: url('fonts/BundesSansWebRegular.ttf') format('truetype');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'BundesSans';
+  src: url('fonts/BundesSansWebBold.ttf') format('truetype');
+  font-weight: 700; font-style: normal;
+}
+@font-face {
+  font-family: 'BundesSerif';
+  src: url('fonts/BundesSerifWebRegular.ttf') format('truetype');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'BundesSerif';
+  src: url('fonts/BundesSerifWebBold.ttf') format('truetype');
+  font-weight: 700; font-style: normal;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'BundesSans',Arial,sans-serif;background:#ECEEF1;color:#1a1a1a;font-size:14px}
+
+/* HEADER */
+.site-header{background:#1a1a1a;color:#fff;padding:13px 24px;display:flex;align-items:center}
+.h-title{font-size:15px;font-weight:700;letter-spacing:.01em;font-family:'BundesSans',Arial,sans-serif}
+.h-sub{font-size:11.5px;opacity:.6;margin-top:2px;font-family:'BundesSans',Arial,sans-serif}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:350px 1fr;min-height:calc(100vh - 52px)}
+
+/* SIDEBAR */
+.sidebar{background:#fff;border-right:1px solid #e0e0e0;padding:18px 16px 24px;overflow-y:auto;height:calc(100vh - 52px);position:sticky;top:0}
+.sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#bbb;margin:18px 0 9px;padding-bottom:5px;border-bottom:1px solid #f0f0f0;font-family:'BundesSans',Arial,sans-serif}
+.sec:first-child{margin-top:0}
+.fg{margin-bottom:10px}
+label{display:block;font-size:11.5px;font-weight:700;color:#555;margin-bottom:3px;font-family:'BundesSans',Arial,sans-serif}
+input[type=text],input[type=email],select{width:100%;padding:7px 9px;border:1.5px solid #ddd;border-radius:4px;font-size:13px;font-family:'BundesSans',Arial,sans-serif;color:#222;background:#fff;transition:border-color .15s;-webkit-appearance:none}
+input:focus,select:focus{outline:none;border-color:#1a1a1a}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{width:100%;padding:11px;border-radius:4px;font-size:13px;font-weight:700;font-family:'BundesSans',Arial,sans-serif;cursor:pointer;margin-top:8px;border:none;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.btn-primary{background:#1a1a1a;color:#fff}
+.btn-primary:hover{background:#333}
+.btn-secondary{background:#fff;color:#1a1a1a;border:2px solid #1a1a1a !important;margin-top:8px}
+.btn-secondary:hover{background:#f5f5f5}
+.chk-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.chk-row input[type=checkbox]{width:16px;height:16px;min-height:unset;flex-shrink:0;accent-color:#1a1a1a;cursor:pointer}
+.chk-row label{font-size:11.5px;font-weight:400;color:#555;margin:0;cursor:pointer}
+
+/* PREVIEW */
+.preview{padding:28px 32px;overflow-y:auto}
+.plabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#aaa;margin-bottom:9px;font-family:'BundesSans',Arial,sans-serif}
+.card-wrap{margin-bottom:36px}
+
+/* ===== BUSINESS CARD =====
+   Real size: 85mm × 55mm
+   Preview scale: 680px / 85mm = 8px/mm
+   Preview: 680 × 440px
+*/
+.bcard{
+  width:680px; height:440px;
+  background:linear-gradient(135deg, #00A99D 0%, #3B4ED0 50%, #C0187A 100%);
+  box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);
+  overflow:hidden;
+  font-family:'BundesSans',Arial,sans-serif;
+  position:relative;
+}
+
+/* === LOGO ===
+   SVG has internal whitespace, so img sits flush at top-left (no card padding).
+   height 184px = 23mm at 8px/mm → stripe ends at ~42% of 440px card.
+*/
+.card-logo{
+  display:block;
+  height:184px;
+  width:auto;
+  flex-shrink:0;
+}
+
+/* === CARD FRONT ===
+   Logo flush top-left (SVG has its own internal whitespace).
+   Text starts at 20.91mm from card left = right edge of flag stripe.
+   In preview (8px/mm): 167px. Bottom: 24px = last text at ~50mm from top.
+*/
+.front{
+  width:100%;height:100%;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.front .card-body{
+  margin-top:auto;
+  padding:0 40px 24px 96px;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Name: ~12pt on real card */
+.card-name{
+  font-family:'BundesSans',Arial,sans-serif;
+  font-weight:700;
+  font-size:34px;
+  color:#fff;
+  letter-spacing:-.01em;
+  line-height:1.1;
+  margin-bottom:6px;
+}
+/* Title + dept + contact: unified ~6.5pt */
+.card-title{
+  font-family:'BundesSans',Arial,sans-serif;
+  font-weight:400;
+  font-size:20px;
+  color:#fff;
+  line-height:1.3;
+}
+.card-dept{
+  font-family:'BundesSans',Arial,sans-serif;
+  font-weight:400;
+  font-size:20px;
+  color:#fff;
+  line-height:1.3;
+  margin-bottom:11px;
+}
+.card-contact{
+  font-family:'BundesSans',Arial,sans-serif;
+  font-weight:400;
+  font-size:20px;
+  color:#fff;
+  line-height:1.5;
+}
+
+/* === CARD BACK === */
+.back{
+  width:100%;height:100%;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.back .card-body{
+  margin-top:auto;
+  padding:0 24px 24px 96px;
+  width:100%;
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+}
+.back .info-col{flex:1;min-width:0;margin-top:-8px}
+.back .qr-col{
+  flex-shrink:0;
+  display:flex;
+  justify-content:flex-end;
+  align-items:flex-start;
+}
+/* QR code ~18mm on real card */
+#qr-code canvas,#qr-code img{
+  width:142px !important;
+  height:142px !important;
+  display:block;
+}
+/* White box so QR stays scannable on dark gradient background */
+#qr-code{
+  background:#fff;
+  padding:5px;
+  border-radius:3px;
+  line-height:0;
+}
+/* CD tagline: #WirMachen + URL bottom-right of front card */
+.cd-tagline{
+  position:absolute;
+  bottom:24px;
+  right:40px;
+  text-align:right;
+  color:#fff;
+  font-family:'BundesSans',Arial,sans-serif;
+  font-size:18px;
+  line-height:1.35;
+  pointer-events:none;
+}
+
+/* ===== TAB BAR (mobile only) ===== */
+.tab-bar{
+  display:none;
+  background:#fff;
+  border-bottom:2px solid #e0e0e0;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+.tab-btn{
+  flex:1;
+  padding:14px 8px;
+  border:none;
+  background:transparent;
+  font-size:14px;
+  font-weight:700;
+  font-family:'BundesSans',Arial,sans-serif;
+  color:#999;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px;
+  transition:color .15s,border-color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.tab-btn.active{color:#1a1a1a;border-bottom-color:#1a1a1a}
+
+/* ===== MOBILE ACTION BAR ===== */
+.mobile-action-bar{
+  display:none;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#fff;
+  border-top:1px solid #e0e0e0;
+  padding:12px 16px;
+  padding-bottom:calc(12px + env(safe-area-inset-bottom));
+  gap:10px;
+  z-index:100;
+}
+
+/* ===== RESPONSIVE / MOBILE ===== */
+@media(max-width:768px){
+  /* Header */
+  .site-header{padding:10px 16px}
+  .h-sub{display:none}
+
+  /* Layout: single-column stacked */
+  .layout{grid-template-columns:1fr;display:block;min-height:unset}
+
+  /* Tab bar visible */
+  .tab-bar{display:flex}
+
+  /* Sidebar: hidden until tab-active, extra bottom padding for action bar */
+  .sidebar{
+    height:auto;
+    position:static;
+    border-right:none;
+    overflow-y:visible;
+    padding:14px 16px 96px;
+    display:none;
+  }
+  .sidebar.tab-active{display:block}
+
+  /* Hide desktop-only buttons in sidebar */
+  .sidebar .btn{display:none}
+
+  /* Mobile action bar */
+  .mobile-action-bar{display:flex}
+
+  /* Preview: hidden until tab-active */
+  .preview{padding:16px 16px 80px;display:none}
+  .preview.tab-active{display:block}
+
+  /* Touch-friendly inputs: 16px prevents iOS zoom-on-focus */
+  input[type=text],input[type=email],select{
+    font-size:16px;
+    padding:12px 9px;
+    min-height:44px;
+  }
+  label{font-size:13px}
+  .sec{margin:14px 0 8px}
+
+  /* Card scaling: JS sets --card-scale and card-wrap dimensions */
+  .card-wrap{overflow:hidden;margin-bottom:20px}
+  .bcard{transform:scale(var(--card-scale,1));transform-origin:top left}
+}
+
+/* ===== PRINT ===== */
+@media print{
+  @page{size:85mm 55mm;margin:0}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff}
+  .site-header,.sidebar,.plabel,.tab-bar,.mobile-action-bar{display:none !important}
+  .layout{display:block}
+  .preview{display:block !important;padding:0}
+  .card-wrap{page-break-after:always;margin:0;width:auto !important;height:auto !important;overflow:visible}
+  .card-wrap:last-child{page-break-after:auto}
+  .bcard{width:85mm;height:55mm;box-shadow:none;transform:none !important}
+  .front,.back{padding:0}
+  .card-logo{height:23mm;width:auto}
+  .front .card-body{padding:0 5mm 3mm 12mm}
+  .back .card-body{padding:0 3mm 3mm 12mm}
+  .back .info-col{margin-top:-0.5mm}
+  .card-name{font-size:12pt;margin-bottom:0.75mm}
+  .card-title{font-size:7pt}
+  .card-dept{font-size:7pt;margin-bottom:1.4mm}
+  .card-contact{font-size:7pt;line-height:1.5}
+  #qr-code canvas,#qr-code img{width:18mm !important;height:18mm !important}
+  #qr-code{padding:1mm;border-radius:1mm}
+  .cd-tagline{font-size:6pt;bottom:3mm;right:5mm}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="h-title">Visitenkarten-Generator</div>
+    <div class="h-sub">Bundesministerium für Digitales und Staatsmodernisierung (BMDS)</div>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn" data-target="sidebar">Eingabe</button>
+  <button class="tab-btn" data-target="preview">Vorschau</button>
+</div>
+
+<div class="layout">
+
+<!-- ===== FORMULAR ===== -->
+<aside class="sidebar">
+  <div class="sec">Persönliche Daten</div>
+  <div class="row2">
+    <div class="fg">
+      <label>Anrede</label>
+      <select id="f-sal"><option value="">–</option><option>Herr</option><option>Frau</option><option>Mx.</option></select>
+    </div>
+    <div class="fg">
+      <label>Akad. Titel</label>
+      <select id="f-acad"><option value="">–</option><option>Dr.</option><option>Prof.</option><option>Prof. Dr.</option><option>Dr. rer. nat.</option><option>Dr. jur.</option></select>
+    </div>
+  </div>
+  <div class="row2">
+    <div class="fg"><label>Vorname</label><input type="text" id="f-fn" value="Maximilian" placeholder="Vorname"></div>
+    <div class="fg"><label>Nachname</label><input type="text" id="f-ln" value="Müstermann" placeholder="Nachname"></div>
+  </div>
+
+  <div class="sec">Position – Deutsch</div>
+  <div class="fg"><label>Berufsbezeichnung / Funktion</label><input type="text" id="f-jt-de" value="Referent" placeholder="z. B. Referent, Referatsleiter"></div>
+  <div class="fg"><label>Abteilung / Referat</label><input type="text" id="f-dept-de1" value="L 1: Ministerbüro und Protokollangelegenheiten" placeholder="Abteilungszeile"></div>
+
+  <div class="sec">Position – English</div>
+  <div class="fg"><label>Job Title / Function</label><input type="text" id="f-jt-en" value="Policy Officer" placeholder="e.g. Expert, Head of Division"></div>
+  <div class="fg"><label>Department / Division</label><input type="text" id="f-dept-en1" value="L 1: Ministers Office and Protocol" placeholder="Department / Division"></div>
+  <div class="fg chk-row">
+    <input type="checkbox" id="f-caps-ln">
+    <label for="f-caps-ln">Nachname in Großbuchstaben (Rückseite)</label>
+  </div>
+
+  <div class="sec">Kontaktdaten</div>
+  <div class="fg"><label>Telefon</label><input type="text" id="f-tel" value="+49 30 18360 10000" placeholder="+49 30 …"></div>
+  <div class="fg"><label>Mobil / Handy (optional)</label><input type="text" id="f-mob" value="+49 000 1234567" placeholder="+49 151 …"></div>
+  <div class="fg"><label>E-Mail</label><input type="email" id="f-mail" value="maximilian.muestermann@bmds.bund.de" placeholder="name@bmds.bund.de"></div>
+
+  <div class="sec">Ministerium</div>
+  <div class="fg"><label>Adresse</label><input type="text" id="f-addr" value="Friedrichstraße 108, 10117 Berlin"></div>
+  <div class="fg chk-row">
+    <input type="checkbox" id="f-addr-qr">
+    <label for="f-addr-qr">Adresse in QR-Code aufnehmen</label>
+  </div>
+
+  <button class="btn btn-primary" onclick="generate()">&#9654; Visitenkarte generieren</button>
+  <button class="btn btn-secondary btn-pdf" onclick="downloadPDF(this)">&#11015; Als PDF herunterladen</button>
+</aside>
+
+<!-- ===== VORSCHAU ===== -->
+<main class="preview">
+
+  <!-- VORDERSEITE -->
+  <div class="card-wrap">
+    <div class="plabel">Vorderseite &#8211; Deutsch</div>
+    <div class="bcard">
+      <div class="front">
+        <img class="card-logo" src="logos/bmds_logo_de_white.svg" alt="BMDS Logo DE">
+        <div class="cd-tagline">#Wir<strong>Machen</strong><br>www.bmds.bund.de</div>
+        <div class="card-body">
+          <div class="card-name" id="d-name">Ralf Käck</div>
+          <div class="card-title" id="d-jt">Referent Standardisierung</div>
+          <div class="card-dept" id="d-dept">DS I 1: IT-Architektur, Portfoliomanagement,<br>Digitale Souveränität</div>
+          <div class="card-contact">
+            <div id="d-addr">Alt-Moabit 140, 10557 Berlin</div>
+            <div id="d-tel-row">Tel.: <span id="d-tel"></span></div>
+            <div id="d-mob-row">Mobil: <span id="d-mob"></span></div>
+            <div id="d-mail"><span id="d-mail-val"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RÜCKSEITE -->
+  <div class="card-wrap">
+    <div class="plabel">Rückseite &#8211; English</div>
+    <div class="bcard">
+      <div class="back">
+        <img class="card-logo" src="logos/bmds_logo_en_white.svg" alt="BMDS Logo EN">
+        <div class="card-body">
+          <div class="info-col">
+            <div class="card-name" id="e-name">Ralf Käck</div>
+            <div class="card-title" id="e-jt">Expert Standardization</div>
+            <div class="card-dept" id="e-dept">DS I 1: IT Architecture, Portfolio Mgmt,<br>Digital Sovereignty</div>
+          </div>
+          <div class="qr-col">
+            <div id="qr-code"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- Mobile sticky action bar -->
+<div class="mobile-action-bar">
+  <button class="btn btn-primary" onclick="generate();switchTab('preview')">&#9654; Generieren</button>
+  <button class="btn btn-secondary btn-pdf" onclick="downloadPDF(this)">&#11015; PDF</button>
+</div>
+
+<script src="js/jspdf.umd.min.js"></script>
+<script src="js/html2canvas.min.js"></script>
+<script src="js/qrcode.js"></script>
+<script>
+'use strict';
+function v(id){return document.getElementById(id).value.trim();}
+
+function fullName(){
+  return [v('f-acad'), v('f-fn'), v('f-ln')].filter(Boolean).join(' ');
+}
+
+function replaceUmlauts(s){
+  return s.replace(/ä/g,'ae').replace(/Ä/g,'Ae')
+          .replace(/ö/g,'oe').replace(/Ö/g,'Oe')
+          .replace(/ü/g,'ue').replace(/Ü/g,'Ue')
+          .replace(/ß/g,'ss');
+}
+
+function buildVCard(){
+  const fn=fullName(), ln=v('f-ln'), fn2=v('f-fn'), pfx=v('f-acad');
+  const jt=v('f-jt-de'), tel=v('f-tel'), mob=v('f-mob'), mail=v('f-mail'), addr=v('f-addr');
+  const addrInQr=document.getElementById('f-addr-qr').checked;
+  const lines=['BEGIN:VCARD','VERSION:3.0',
+    `N:${ln};${fn2};;${pfx};`, `FN:${fn}`];
+  if(jt)lines.push(`TITLE:${jt}`);
+  lines.push('ORG:BMDS');
+  if(tel)lines.push(`TEL;TYPE=WORK,VOICE:${tel}`);
+  if(mob)lines.push(`TEL;TYPE=CELL:${mob}`);
+  if(mail)lines.push(`EMAIL:${mail}`);
+  if(addrInQr && addr){
+    const ci=addr.indexOf(',');
+    const street=ci>=0?addr.slice(0,ci).trim():addr;
+    const rest=ci>=0?addr.slice(ci+1).trim():'';
+    const m=rest.match(/^(\d{4,5})\s+(.+)$/);
+    lines.push(`ADR;TYPE=WORK:;;${street};${m?m[2]:rest};;${m?m[1]:''};Deutschland`);
+  }
+  lines.push('END:VCARD');
+  return lines.join('\r\n');
+}
+
+function set(id,val){document.getElementById(id).textContent=val;}
+function showEl(id,show){document.getElementById(id).style.display=show?'block':'none';}
+function setHtml(id,val){document.getElementById(id).innerHTML=val;}
+
+function generate(){
+  const name=fullName();
+  const tel=v('f-tel'), mob=v('f-mob'), mail=v('f-mail'), addr=v('f-addr');
+  const jtDE=v('f-jt-de'), d1DE=v('f-dept-de1');
+  const jtEN=v('f-jt-en'), d1EN=v('f-dept-en1');
+
+  // Front
+  set('d-name', name);
+  set('d-jt', jtDE);
+  setHtml('d-dept', d1DE);
+  set('d-addr', addr);
+  set('d-tel', tel); showEl('d-tel-row', !!tel);
+  set('d-mob', mob); showEl('d-mob-row', !!mob);
+  set('d-mail-val', mail); showEl('d-mail', !!mail);
+
+  // Back: umlauts → ASCII, optionally uppercase last name
+  const capsLn=document.getElementById('f-caps-ln').checked;
+  const eName=[v('f-acad'),v('f-fn'),v('f-ln')].filter(Boolean)
+    .map((s,i,a)=>{const r=replaceUmlauts(s);return capsLn&&i===a.length-1?r.toUpperCase():r;}).join(' ');
+  set('e-name',eName);
+  set('e-jt', jtEN);
+  setHtml('e-dept', d1EN);
+
+  // QR Code
+  const qrDiv=document.getElementById('qr-code');
+  qrDiv.innerHTML='';
+  if(typeof QRCode==='undefined'){
+    console.error('QRCode library not loaded – check js/qrcode.min.js');
+    qrDiv.innerHTML='<div style="width:148px;height:148px;border:1.5px dashed #e00;display:flex;align-items:center;justify-content:center;font-size:10px;color:#e00;text-align:center;padding:8px">QR-Bibliothek<br>nicht geladen</div>';
+    return;
+  }
+  try{
+    new QRCode(qrDiv,{
+      text:buildVCard(), width:142, height:142,
+      colorDark:'#000000', colorLight:'#ffffff',
+      correctLevel:QRCode.CorrectLevel.M,
+      typeNumber:0
+    });
+  }catch(e){
+    console.error('QRCode error:', e);
+    qrDiv.innerHTML='<div style="width:148px;height:148px;border:1px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:10px;color:#aaa;text-align:center">QR Code<br>Fehler</div>';
+  }
+}
+
+/* ===== MOBILE: tab switching ===== */
+function switchTab(target){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.target===target));
+  document.querySelector('.sidebar').classList.toggle('tab-active',target==='sidebar');
+  document.querySelector('.preview').classList.toggle('tab-active',target==='preview');
+  if(target==='preview') scaleCards();
+}
+
+/* ===== MOBILE: card scaling ===== */
+function scaleCards(){
+  const mobile=window.innerWidth<=768;
+  if(!mobile){
+    document.documentElement.style.removeProperty('--card-scale');
+    document.querySelectorAll('.card-wrap').forEach(w=>{w.style.width='';w.style.height='';});
+    return;
+  }
+  const scale=Math.min(1,(window.innerWidth-32)/680);
+  document.documentElement.style.setProperty('--card-scale',scale);
+  document.querySelectorAll('.card-wrap').forEach(w=>{
+    w.style.width=Math.round(680*scale)+'px';
+    w.style.height=Math.round(440*scale+28)+'px';
+  });
+}
+
+/* Tab buttons: always bind, regardless of viewport at load time */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>switchTab(btn.dataset.target));
+});
+
+let resizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(()=>{
+    scaleCards();
+    /* Entering mobile view: ensure one panel is visible */
+    if(window.innerWidth<=768){
+      const anyActive=document.querySelector('.sidebar.tab-active,.preview.tab-active');
+      if(!anyActive) switchTab('sidebar');
+    }
+  },100);
+});
+
+let inputTimer;
+document.querySelectorAll('input,select').forEach(el=>{
+  el.addEventListener('input',()=>{clearTimeout(inputTimer);inputTimer=setTimeout(generate,300);});
+  el.addEventListener('change',generate);
+});
+document.getElementById('f-addr-qr').addEventListener('change',generate);
+document.getElementById('f-caps-ln').addEventListener('change',generate);
+
+document.addEventListener('DOMContentLoaded',()=>{
+  generate();
+  scaleCards();
+  if(window.innerWidth<=768) switchTab('sidebar');
+});
+
+async function downloadPDF(btn){
+  const orig=btn?btn.innerHTML:'';
+  document.querySelectorAll('.btn-pdf').forEach(b=>{b.disabled=true;b.innerHTML='Erstelle PDF…';});
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'landscape',unit:'mm',format:[85,55]});
+    const cards=[...document.querySelectorAll('.bcard')];
+    for(let i=0;i<cards.length;i++){
+      if(i>0)doc.addPage([85,55],'landscape');
+      const card=cards[i];
+      const savedTransform=card.style.transform;
+      card.style.transform='none';
+      const canvas=await html2canvas(card,{
+        scale:2,
+        width:680,height:440,
+        backgroundColor:null,
+        logging:false,
+        useCORS:true
+      });
+      card.style.transform=savedTransform;
+      doc.addImage(canvas.toDataURL('image/jpeg',0.97),'JPEG',0,0,85,55);
+    }
+    const toA=s=>s.replace(/ä/g,'ae').replace(/Ä/g,'Ae').replace(/ö/g,'oe')
+                   .replace(/Ö/g,'Oe').replace(/ü/g,'ue').replace(/Ü/g,'Ue')
+                   .replace(/ß/g,'ss').replace(/[^a-zA-Z0-9]/g,'');
+    const namePart=[toA(v('f-ln')),toA(v('f-fn'))].filter(Boolean).join('-');
+    doc.save('visitenkarte-bmds'+(namePart?'-'+namePart:'')+'.pdf');
+  }catch(e){
+    console.error('PDF error:',e);
+    alert('Fehler bei der PDF-Erstellung: '+e.message);
+  }finally{
+    document.querySelectorAll('.btn-pdf').forEach(b=>{b.disabled=false;});
+    if(btn)btn.innerHTML=orig;
+  }
+}
+</script>
+</body>
+</html>
