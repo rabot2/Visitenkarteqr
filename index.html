@@ -67,7 +67,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 */
 .bcard{
   width:680px; height:440px;
-  background:#fff;
+  background:linear-gradient(135deg, #00A99D 0%, #3B4ED0 50%, #C0187A 100%);
   box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);
   overflow:hidden;
   font-family:'BundesSans',Arial,sans-serif;
@@ -110,7 +110,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   font-family:'BundesSans',Arial,sans-serif;
   font-weight:700;
   font-size:34px;
-  color:#000;
+  color:#fff;
   letter-spacing:-.01em;
   line-height:1.1;
   margin-bottom:6px;
@@ -120,14 +120,14 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   font-family:'BundesSans',Arial,sans-serif;
   font-weight:400;
   font-size:20px;
-  color:#000;
+  color:#fff;
   line-height:1.3;
 }
 .card-dept{
   font-family:'BundesSans',Arial,sans-serif;
   font-weight:400;
   font-size:20px;
-  color:#000;
+  color:#fff;
   line-height:1.3;
   margin-bottom:11px;
 }
@@ -135,7 +135,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   font-family:'BundesSans',Arial,sans-serif;
   font-weight:400;
   font-size:20px;
-  color:#000;
+  color:#fff;
   line-height:1.5;
 }
 
@@ -167,6 +167,25 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   width:142px !important;
   height:142px !important;
   display:block;
+}
+/* White box so QR stays scannable on dark gradient background */
+#qr-code{
+  background:#fff;
+  padding:5px;
+  border-radius:3px;
+  line-height:0;
+}
+/* CD tagline: #WirMachen + URL bottom-right of front card */
+.cd-tagline{
+  position:absolute;
+  bottom:24px;
+  right:40px;
+  text-align:right;
+  color:#fff;
+  font-family:'BundesSans',Arial,sans-serif;
+  font-size:18px;
+  line-height:1.35;
+  pointer-events:none;
 }
 
 /* ===== TAB BAR (mobile only) ===== */
@@ -278,6 +297,8 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   .card-dept{font-size:7pt;margin-bottom:1.4mm}
   .card-contact{font-size:7pt;line-height:1.5}
   #qr-code canvas,#qr-code img{width:18mm !important;height:18mm !important}
+  #qr-code{padding:1mm;border-radius:1mm}
+  .cd-tagline{font-size:6pt;bottom:3mm;right:5mm}
 }
 </style>
 </head>
@@ -351,7 +372,8 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Vorderseite &#8211; Deutsch</div>
     <div class="bcard">
       <div class="front">
-        <img class="card-logo" src="logos/bmds_logo_de.svg" alt="BMDS Logo DE">
+        <img class="card-logo" src="logos/bmds_logo_de_white.svg" alt="BMDS Logo DE">
+        <div class="cd-tagline">#Wir<strong>Machen</strong><br>www.bmds.bund.de</div>
         <div class="card-body">
           <div class="card-name" id="d-name">Ralf Käck</div>
           <div class="card-title" id="d-jt">Referent Standardisierung</div>
@@ -372,7 +394,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
     <div class="plabel">Rückseite &#8211; English</div>
     <div class="bcard">
       <div class="back">
-        <img class="card-logo" src="logos/bmds_logo_en.svg" alt="BMDS Logo EN">
+        <img class="card-logo" src="logos/bmds_logo_en_white.svg" alt="BMDS Logo EN">
         <div class="card-body">
           <div class="info-col">
             <div class="card-name" id="e-name">Ralf Käck</div>
@@ -555,7 +577,7 @@ async function downloadPDF(btn){
       const canvas=await html2canvas(card,{
         scale:2,
         width:680,height:440,
-        backgroundColor:'#ffffff',
+        backgroundColor:null,
         logging:false,
         useCORS:true
       });
