@@ -324,6 +324,10 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   <div class="fg"><label>Job Title / Function</label><input type="text" id="f-jt-en" value="Policy Officer" placeholder="e.g. Expert, Head of Division"></div>
   <div class="fg"><label>Department / Division (Line 1)</label><input type="text" id="f-dept-en1" value="L 1: Ministers Office and Protocol" placeholder="Department line 1"></div>
   <div class="fg"><label>Department / Division (Line 2)</label><input type="text" id="f-dept-en2" value="" placeholder="Department line 2 (optional)"></div>
+  <div class="fg chk-row">
+    <input type="checkbox" id="f-caps-ln">
+    <label for="f-caps-ln">Nachname in Großbuchstaben (Rückseite)</label>
+  </div>
 
   <div class="sec">Kontaktdaten</div>
   <div class="fg"><label>Telefon</label><input type="text" id="f-tel" value="+49 30 18360 10000" placeholder="+49 30 …"></div>
@@ -453,8 +457,11 @@ function generate(){
   set('d-mob', mob); showEl('d-mob-row', !!mob);
   set('d-mail-val', mail); showEl('d-mail', !!mail);
 
-  // Back: umlauts → ASCII
-  set('e-name', replaceUmlauts(name));
+  // Back: umlauts → ASCII, optionally uppercase last name
+  const capsLn=document.getElementById('f-caps-ln').checked;
+  const eName=[v('f-acad'),v('f-fn'),v('f-ln')].filter(Boolean)
+    .map((s,i,a)=>{const r=replaceUmlauts(s);return capsLn&&i===a.length-1?r.toUpperCase():r;}).join(' ');
+  set('e-name',eName);
   set('e-jt', jtEN);
   setHtml('e-dept', d2EN ? d1EN+'<br>'+d2EN : d1EN);
 
@@ -527,6 +534,7 @@ document.querySelectorAll('input,select').forEach(el=>{
   el.addEventListener('change',generate);
 });
 document.getElementById('f-addr-qr').addEventListener('change',generate);
+document.getElementById('f-caps-ln').addEventListener('change',generate);
 
 document.addEventListener('DOMContentLoaded',()=>{
   generate();
