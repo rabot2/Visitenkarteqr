@@ -317,13 +317,11 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 
   <div class="sec">Position – Deutsch</div>
   <div class="fg"><label>Berufsbezeichnung / Funktion</label><input type="text" id="f-jt-de" value="Referent" placeholder="z. B. Referent, Referatsleiter"></div>
-  <div class="fg"><label>Abteilung / Referat (Zeile 1)</label><input type="text" id="f-dept-de1" value="L 1: Ministerbüro und Protokollangelegenheiten" placeholder="Abteilungszeile 1"></div>
-  <div class="fg"><label>Abteilung / Referat (Zeile 2)</label><input type="text" id="f-dept-de2" value="" placeholder="Abteilungszeile 2 (optional)"></div>
+  <div class="fg"><label>Abteilung / Referat</label><input type="text" id="f-dept-de1" value="L 1: Ministerbüro und Protokollangelegenheiten" placeholder="Abteilungszeile"></div>
 
   <div class="sec">Position – English</div>
   <div class="fg"><label>Job Title / Function</label><input type="text" id="f-jt-en" value="Policy Officer" placeholder="e.g. Expert, Head of Division"></div>
-  <div class="fg"><label>Department / Division (Line 1)</label><input type="text" id="f-dept-en1" value="L 1: Ministers Office and Protocol" placeholder="Department line 1"></div>
-  <div class="fg"><label>Department / Division (Line 2)</label><input type="text" id="f-dept-en2" value="" placeholder="Department line 2 (optional)"></div>
+  <div class="fg"><label>Department / Division</label><input type="text" id="f-dept-en1" value="L 1: Ministers Office and Protocol" placeholder="Department / Division"></div>
   <div class="fg chk-row">
     <input type="checkbox" id="f-caps-ln">
     <label for="f-caps-ln">Nachname in Großbuchstaben (Rückseite)</label>
@@ -445,13 +443,13 @@ function setHtml(id,val){document.getElementById(id).innerHTML=val;}
 function generate(){
   const name=fullName();
   const tel=v('f-tel'), mob=v('f-mob'), mail=v('f-mail'), addr=v('f-addr');
-  const jtDE=v('f-jt-de'), d1DE=v('f-dept-de1'), d2DE=v('f-dept-de2');
-  const jtEN=v('f-jt-en'), d1EN=v('f-dept-en1'), d2EN=v('f-dept-en2');
+  const jtDE=v('f-jt-de'), d1DE=v('f-dept-de1');
+  const jtEN=v('f-jt-en'), d1EN=v('f-dept-en1');
 
   // Front
   set('d-name', name);
   set('d-jt', jtDE);
-  setHtml('d-dept', d2DE ? d1DE+'<br>'+d2DE : d1DE);
+  setHtml('d-dept', d1DE);
   set('d-addr', addr);
   set('d-tel', tel); showEl('d-tel-row', !!tel);
   set('d-mob', mob); showEl('d-mob-row', !!mob);
@@ -463,7 +461,7 @@ function generate(){
     .map((s,i,a)=>{const r=replaceUmlauts(s);return capsLn&&i===a.length-1?r.toUpperCase():r;}).join(' ');
   set('e-name',eName);
   set('e-jt', jtEN);
-  setHtml('e-dept', d2EN ? d1EN+'<br>'+d2EN : d1EN);
+  setHtml('e-dept', d1EN);
 
   // QR Code
   const qrDiv=document.getElementById('qr-code');
