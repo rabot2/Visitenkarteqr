@@ -62,19 +62,23 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 .card-wrap{margin-bottom:36px}
 
 /* ===== BUSINESS CARD =====
-   Real size: 85mm × 55mm
-   Preview scale: 680px / 85mm = 8px/mm
-   Preview: 680 × 440px
+   Real size: 85mm × 55mm  +  2mm bleed all around = 89mm × 59mm
+   Preview scale: 8px/mm  →  bleed area: 712 × 472px
 */
 .bcard{
-  width:680px; height:440px;
+  width:712px; height:472px;
   background-image:url('backgrounds/bmds_bg.jpg');
   background-size:cover;
   background-position:right top;
   box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.08);
-  overflow:hidden;
   font-family:'BundesSans',Arial,sans-serif;
   position:relative;
+}
+/* card-face = 85×55mm / 680×440px content area, offset by 2mm bleed */
+.card-face{
+  position:absolute;
+  inset:16px;
+  overflow:hidden;
 }
 
 /* === LOGO ===
@@ -183,7 +187,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   position:absolute;
   width:152px;
   height:auto;
-  top:32px;
+  top:36px;
   right:24px;
   pointer-events:none;
 }
@@ -290,7 +294,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
 
 /* ===== PRINT ===== */
 @media print{
-  @page{size:85mm 55mm;margin:0}
+  @page{size:89mm 59mm;margin:0}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{background:#fff}
   .site-header,.sidebar,.plabel,.tab-bar,.mobile-action-bar{display:none !important}
@@ -298,7 +302,8 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   .preview{display:block !important;padding:0}
   .card-wrap{page-break-after:always;margin:0;width:auto !important;height:auto !important;overflow:visible}
   .card-wrap:last-child{page-break-after:auto}
-  .bcard{width:85mm;height:55mm;box-shadow:none;transform:none !important}
+  .bcard{width:89mm;height:59mm;box-shadow:none;transform:none !important}
+  .card-face{inset:2mm}
   .front,.back{padding:0}
   .card-logo{height:23mm;width:auto}
   .front .card-body{padding:0 5mm 3mm 12mm}
@@ -311,7 +316,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   #qr-code canvas,#qr-code img{width:18mm !important;height:18mm !important}
   #qr-code{padding:1mm;border-radius:1mm}
   .cd-tagline{font-size:7pt;bottom:3mm;right:5mm}
-  .cd-arrows-img{width:20mm;height:auto;top:4mm;right:3mm}
+  .cd-arrows-img{width:20mm;height:auto;top:4.5mm;right:3mm}
 }
 </style>
 </head>
@@ -384,6 +389,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   <div class="card-wrap">
     <div class="plabel">Vorderseite &#8211; Deutsch</div>
     <div class="bcard">
+      <div class="card-face">
       <div class="front">
         <img class="cd-arrows-img" src="backgrounds/bmds_arrows.png" alt="">
         <img class="card-logo" src="logos/bmds_logo_de_white.svg" alt="BMDS Logo DE">
@@ -400,6 +406,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
           </div>
         </div>
       </div>
+      </div>
     </div>
   </div>
 
@@ -407,6 +414,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   <div class="card-wrap">
     <div class="plabel">Rückseite &#8211; English</div>
     <div class="bcard">
+      <div class="card-face">
       <div class="back">
         <img class="cd-arrows-img" src="backgrounds/bmds_arrows.png" alt="">
         <img class="card-logo" src="logos/bmds_logo_en_white.svg" alt="BMDS Logo EN">
@@ -420,6 +428,7 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
             <div id="qr-code"></div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -537,11 +546,11 @@ function scaleCards(){
     document.querySelectorAll('.card-wrap').forEach(w=>{w.style.width='';w.style.height='';});
     return;
   }
-  const scale=Math.min(1,(window.innerWidth-32)/680);
+  const scale=Math.min(1,(window.innerWidth-32)/712);
   document.documentElement.style.setProperty('--card-scale',scale);
   document.querySelectorAll('.card-wrap').forEach(w=>{
-    w.style.width=Math.round(680*scale)+'px';
-    w.style.height=Math.round(440*scale+28)+'px';
+    w.style.width=Math.round(712*scale)+'px';
+    w.style.height=Math.round(472*scale+28)+'px';
   });
 }
 
@@ -582,22 +591,22 @@ async function downloadPDF(btn){
   document.querySelectorAll('.btn-pdf').forEach(b=>{b.disabled=true;b.innerHTML='Erstelle PDF…';});
   try{
     const {jsPDF}=window.jspdf;
-    const doc=new jsPDF({orientation:'landscape',unit:'mm',format:[85,55]});
+    const doc=new jsPDF({orientation:'landscape',unit:'mm',format:[89,59]});
     const cards=[...document.querySelectorAll('.bcard')];
     for(let i=0;i<cards.length;i++){
-      if(i>0)doc.addPage([85,55],'landscape');
+      if(i>0)doc.addPage([89,59],'landscape');
       const card=cards[i];
       const savedTransform=card.style.transform;
       card.style.transform='none';
       const canvas=await html2canvas(card,{
         scale:2,
-        width:680,height:440,
+        width:712,height:472,
         backgroundColor:null,
         logging:false,
         useCORS:true
       });
       card.style.transform=savedTransform;
-      doc.addImage(canvas.toDataURL('image/jpeg',0.97),'JPEG',0,0,85,55);
+      doc.addImage(canvas.toDataURL('image/jpeg',0.97),'JPEG',0,0,89,59);
     }
     const toA=s=>s.replace(/ä/g,'ae').replace(/Ä/g,'Ae').replace(/ö/g,'oe')
                    .replace(/Ö/g,'Oe').replace(/ü/g,'ue').replace(/Ü/g,'Ue')
