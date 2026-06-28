@@ -304,37 +304,37 @@ input:focus,select:focus{outline:none;border-color:#1a1a1a}
   <div class="row2">
     <div class="fg">
       <label>Anrede</label>
-      <select id="f-sal"><option value="">–</option><option>Herr</option><option>Frau</option><option>Mx.</option></select>
+      <select id="f-sal" autocomplete="honorific-prefix"><option value="">–</option><option>Herr</option><option>Frau</option><option>Mx.</option></select>
     </div>
     <div class="fg">
       <label>Akad. Titel</label>
-      <select id="f-acad"><option value="">–</option><option>Dr.</option><option>Prof.</option><option>Prof. Dr.</option><option>Dr. rer. nat.</option><option>Dr. jur.</option></select>
+      <select id="f-acad" autocomplete="honorific-prefix"><option value="">–</option><option>Dr.</option><option>Prof.</option><option>Prof. Dr.</option><option>Dr. rer. nat.</option><option>Dr. jur.</option></select>
     </div>
   </div>
   <div class="row2">
-    <div class="fg"><label>Vorname</label><input type="text" id="f-fn" value="Maximilian" placeholder="Vorname"></div>
-    <div class="fg"><label>Nachname</label><input type="text" id="f-ln" value="Müstermann" placeholder="Nachname"></div>
+    <div class="fg"><label>Vorname</label><input type="text" id="f-fn" autocomplete="given-name" value="Maximilian" placeholder="Vorname"></div>
+    <div class="fg"><label>Nachname</label><input type="text" id="f-ln" autocomplete="family-name" value="Müstermann" placeholder="Nachname"></div>
   </div>
 
   <div class="sec">Position – Deutsch</div>
-  <div class="fg"><label>Berufsbezeichnung / Funktion</label><input type="text" id="f-jt-de" value="Referent" placeholder="z. B. Referent, Referatsleiter"></div>
-  <div class="fg"><label>Abteilung / Referat</label><input type="text" id="f-dept-de1" value="L 1: Ministerbüro und Protokollangelegenheiten" placeholder="Abteilungszeile"></div>
+  <div class="fg"><label>Berufsbezeichnung / Funktion</label><input type="text" id="f-jt-de" autocomplete="organization-title" value="Referent" placeholder="z. B. Referent, Referatsleiter"></div>
+  <div class="fg"><label>Abteilung / Referat</label><input type="text" id="f-dept-de1" autocomplete="off" value="L 1: Ministerbüro und Protokollangelegenheiten" placeholder="Abteilungszeile"></div>
 
   <div class="sec">Position – English</div>
-  <div class="fg"><label>Job Title / Function</label><input type="text" id="f-jt-en" value="Policy Officer" placeholder="e.g. Expert, Head of Division"></div>
-  <div class="fg"><label>Department / Division</label><input type="text" id="f-dept-en1" value="L 1: Ministers Office and Protocol" placeholder="Department / Division"></div>
+  <div class="fg"><label>Job Title / Function</label><input type="text" id="f-jt-en" autocomplete="off" value="Policy Officer" placeholder="e.g. Expert, Head of Division"></div>
+  <div class="fg"><label>Department / Division</label><input type="text" id="f-dept-en1" autocomplete="off" value="L 1: Ministers Office and Protocol" placeholder="Department / Division"></div>
   <div class="fg chk-row">
     <input type="checkbox" id="f-caps-ln">
     <label for="f-caps-ln">Nachname in Großbuchstaben (Rückseite)</label>
   </div>
 
   <div class="sec">Kontaktdaten</div>
-  <div class="fg"><label>Telefon</label><input type="text" id="f-tel" value="+49 30 18360 10000" placeholder="+49 30 …"></div>
-  <div class="fg"><label>Mobil / Handy (optional)</label><input type="text" id="f-mob" value="+49 000 1234567" placeholder="+49 151 …"></div>
-  <div class="fg"><label>E-Mail</label><input type="email" id="f-mail" value="maximilian.muestermann@bmds.bund.de" placeholder="name@bmds.bund.de"></div>
+  <div class="fg"><label>Telefon</label><input type="tel" id="f-tel" autocomplete="tel" value="+49 30 18360 10000" placeholder="+49 30 …"></div>
+  <div class="fg"><label>Mobil / Handy (optional)</label><input type="tel" id="f-mob" autocomplete="tel" value="+49 000 1234567" placeholder="+49 151 …"></div>
+  <div class="fg"><label>E-Mail</label><input type="email" id="f-mail" autocomplete="email" value="maximilian.muestermann@bmds.bund.de" placeholder="name@bmds.bund.de"></div>
 
   <div class="sec">Ministerium</div>
-  <div class="fg"><label>Adresse</label><input type="text" id="f-addr" value="Friedrichstraße 108, 10117 Berlin"></div>
+  <div class="fg"><label>Adresse</label><input type="text" id="f-addr" autocomplete="street-address" value="Friedrichstraße 108, 10117 Berlin"></div>
   <div class="fg chk-row">
     <input type="checkbox" id="f-addr-qr">
     <label for="f-addr-qr">Adresse in QR-Code aufnehmen</label>
